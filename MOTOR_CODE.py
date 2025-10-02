@@ -53,10 +53,74 @@ def stop():
     motor_left.stop()
     motor_right.stop()
 
+from time import sleep
+
+# --- Motion Macros (based on your Arduino logic) ---
+
+def straight():
+    fwd()
+    sleep(5.5)
+
+def hairpin(dir):
+    if dir == "right":
+        fwd()
+        sleep(2)
+        stop()
+        turn(-90)
+        fwd()
+        sleep(1)
+    else:
+        fwd()
+        sleep(2)
+        stop()
+        turn(90)
+        fwd()
+        sleep(1)
+
+def curve(dir):
+    if dir == "left":
+        fwd()
+        sleep(2)
+        stop()
+        turn(75)
+        fwd()
+        sleep(0.5)
+    else:
+        fwd()
+        sleep(2)
+        stop()
+        turn(-75)
+        fwd()
+        # Duration for final movement after turn not specified, assuming 0.5
+        sleep(0.5)
+
+def crossroad(dir):
+    fwd()
+    sleep(2)
+    if dir == "fwd":
+        fwd()
+        sleep(1)
+    elif dir == "left":
+        turn(45)
+        fwd()
+        sleep(1.5)
+    elif dir == "right":
+        turn(-45)
+        fwd()
+        sleep(1.5)
+    else:
+        fwd()
+        sleep(5)
+
+def delivery_point():
+    fwd()
+    sleep(1.5)
+
 # Main loop simulation
 if __name__ == '__main__':
     fwd(speed=0.8)
     bwd(speed=0.8)
     turn(degree=90, speed=0.8)
     turn(degree=-90, speed=0.8)
+
     stop()
