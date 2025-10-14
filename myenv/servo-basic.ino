@@ -1,0 +1,57 @@
+#include <Servo.h>
+Servo arm;
+Servo axial;
+Servo grab;
+
+void setup() {
+  grab.attach(8);
+  arm.attach(9);
+  axial.attach(10)
+
+  //this is just to reset grabber to close position
+  grab.write(160);
+}
+
+void loop(){
+  delay(3000);
+  //slow speed of arm bending right then back to default position(upright)
+
+  //.write(val) value is 0-89(clockwise) 0 is full speed while 89 is lowest(I haven't tried 89)
+  arm.write(65);
+  //delay(val) it took around 900ms for arm to bend down 90 degrees at speed 65 (note*: this was when the arm is not holding anything yet, you may need to twiddle 
+  //with the timing a little to account for different weights)
+  delay(900); 
+
+  arm.write(90);
+  //90 would just meant the arm stops moving, arm would stop moving for 1500ms between each movement
+  delay(1500);
+
+  //.write(val) value is 91-180(anti-clockwise) 180 is full speed while 91 is lowest
+  arm.write(135);
+  delay(900);
+
+  arm.write(90);
+  delay(3000);
+
+  //grabber open position at 160 degrees
+  grab.write(160);
+  delay(1500);
+  //grabber closes position at 120 degrees after 1500ms
+  grab.write(120);
+  delay(1500);
+
+  //note*: I haven't tried the axial turn with the arm attached so timing value will be very different, nevertheless the code is bout the same logic as arm, just from 
+  //a different axis
+
+  axial.write(65);
+  //arm faces to the right
+  delay(700);
+
+  axial.write(90);
+  delay(1500);
+
+  axial.write(135);
+  //arm faces to the right
+  delay(700);  
+  while(true);
+}
