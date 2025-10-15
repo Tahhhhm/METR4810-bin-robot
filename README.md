@@ -61,4 +61,3 @@ A mechatronics engineering project for METR4810 focused on automation, machine v
 - **Brandon Pang**
 - **Amaana Hussein**
 - **Karan Vijay Shankar**
-- 
