@@ -2,3 +2,4 @@ ultralytics
 gpiozero
 blinka
 piicodev
+adafruit-circuitpython-tca9548a
