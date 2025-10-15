@@ -31,19 +31,18 @@ def turn(degree):
     Positive = Clockwise (right turn)
     Negative = Counter-clockwise (left turn)
     """
-    # Simple estimation: 90 degrees ≈ 0.5 seconds (need to calibrate this)
-    turn_time = (abs(degree) / 90.0) * 1  # adjust 0.5 based on real-world testing
+    turn_time = (abs(degree) / 90.0) * 1  # adjust 0.5 based input voltage
 
     if degree > 0:
         # Clockwise: left forward, right backward
         print("RIGHT")
         motor_left.forward()
-        motor_right.backward() # REPLACE VALUE ON TESTING
+        motor_right.backward() 
     elif degree < 0:
         print("LEFT")
         # Anticlockwise: left backward, right forward
         motor_left.backward()
-        motor_right.forward()  # REPLACE VALUE ON TESTING
+        motor_right.forward() 
     else:
         return  # No turning
 
@@ -53,7 +52,7 @@ def stop():
     motor_left.stop()
     motor_right.stop()
 
-# --- Motion Macros (based on your Arduino logic) ---
+# --- Motion Macros (based on motor_simple.ino logic) ---
 
 def straight():
     fwd()
@@ -89,7 +88,6 @@ def curve(dir):
         stop()
         turn(-75)
         fwd()
-        # Duration for final movement after turn not specified, assuming 0.5
         sleep(0.5)
 
 def crossroad(dir):
