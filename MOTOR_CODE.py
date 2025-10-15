@@ -10,50 +10,48 @@ from gpiozero import Motor
 from time import sleep
 
 # Initialize motors (adjust GPIO pins accordingly)
-motor_left = Motor(forward=17, backward=18)
-motor_right = Motor(forward=22, backward=23)
+motor_left = Motor(forward=23, backward=24)
+motor_right = Motor(forward=17, backward=27)
 
-def fwd(speed=1.0, duration=1.0):
-    motor_left.forward(speed)
-    motor_right.forward(speed)
+def fwd():
+    print("ONWARD")
+    motor_left.forward()
+    motor_right.forward()
     #sleep(duration)
-    stop()
 
-def bwd(speed=1.0, duration=1.0):
-    motor_left.backward(speed)
-    motor_right.backward(speed)
+def bwd():
+    print("RETREAT")
+    motor_left.backward()
+    motor_right.backward()
     #sleep(duration)
-    stop()
 
-def turn(degree, speed=1.0):
+def turn(degree):
     """
     Turns the robot by a specified degree.
     Positive = Clockwise (right turn)
     Negative = Counter-clockwise (left turn)
     """
     # Simple estimation: 90 degrees ≈ 0.5 seconds (need to calibrate this)
-    turn_time = abs(degree) / 90.0 * 0.5  # adjust 0.5 based on real-world testing
+    turn_time = (abs(degree) / 90.0) * 1  # adjust 0.5 based on real-world testing
 
     if degree > 0:
         # Clockwise: left forward, right backward
-        motor_left.forward(speed)
-        motor_right.backward(speed) # REPLACE VALUE ON TESTING
+        print("RIGHT")
+        motor_left.forward()
+        motor_right.backward() # REPLACE VALUE ON TESTING
     elif degree < 0:
+        print("LEFT")
         # Anticlockwise: left backward, right forward
-        motor_left.backward(speed)
-        motor_right.forward(speed)  # REPLACE VALUE ON TESTING
+        motor_left.backward()
+        motor_right.forward()  # REPLACE VALUE ON TESTING
     else:
         return  # No turning
 
     sleep(turn_time)
-    stop()
-
 
 def stop():
     motor_left.stop()
     motor_right.stop()
-
-from time import sleep
 
 # --- Motion Macros (based on your Arduino logic) ---
 
@@ -116,11 +114,8 @@ def delivery_point():
     fwd()
     sleep(1.5)
 
-# Main loop simulation
-if __name__ == '__main__':
-    fwd(speed=0.8)
-    bwd(speed=0.8)
-    turn(degree=90, speed=0.8)
-    turn(degree=-90, speed=0.8)
 
-    stop()
+turn(degree=-90)
+stop()
+motor_left.close()
+motor_right.close()
