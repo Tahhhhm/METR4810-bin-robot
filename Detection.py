@@ -34,9 +34,13 @@ while True:
 
         # Decide if left or right
         if center_x < middle_x:
-            side = "LEFT"
+            side = "left"
         else:
-            side = "RIGHT"
+            side = "right"
+        
+        binlocation = f"{side}{label}"
+        
+        print(binlocation)
 
         # Display side text
         cv2.putText(
