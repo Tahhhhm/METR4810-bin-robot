@@ -1,8 +1,10 @@
 # This code combines all the functions and models and lays out operational procedure of the METR4810
 # Miniturized Garbage Bin Prototype
 from MOTOR_CODE import MotorController
+from SERVO_CODE import ServoController
 
 motor_assembly = MotorController([23, 24, 17, 27]) # This is what we're using on the prototype
+servo_assembly = ServoController([0, 1 ,2])
 
 # Navigate (near entire) track to find delivery zones and bins
 
