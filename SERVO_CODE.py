@@ -1,98 +1,130 @@
 from PiicoDev_Servo import PiicoDev_Servo, PiicoDev_Servo_Driver
 from PiicoDev_Unified import sleep_ms
 
+class ServoController:
+    """
+    A class to control a robotic arm that picks up and releases bins using servo motors.
 
-controller = PiicoDev_Servo_Driver()
+    Attributes:
+        servo_bottom (PiicoDev_Servo): Controls the base rotation.
+        servo_arm (PiicoDev_Servo): Controls the vertical arm movement.
+        servo_claw (PiicoDev_Servo): Controls the claw (gripper) opening and closing.
+    """
 
-servo_bottom = PiicoDev_Servo(controller, 1, midpoint_us = 1400, range_us = 1800)
-servo_arm= PiicoDev_Servo(controller, 2, midpoint_us = 1500, range_us = 1800) # arm  z 
-servo_claw = PiicoDev_Servo(controller, 3)
+    def __init__(self, servo_buses):
+        """
+        Initialize the BinPickupRobot with servo bus numbers.
 
-def pickup_left():
-    print("Starting pickup procedure")
-    servo_arm.speed = -0.1 # go down i.e move left 
-    sleep_ms(1500)
-    servo_arm.speed = 0 
-    
-    #grab bin 
-    servo_claw.angle = 90
-    sleep_ms(1000)
+        Args:
+            servo_buses (list or tuple): A list or tuple of 3 integers representing the
+                bus numbers for the bottom, arm, and claw servos, respectively.
+        """
+        if len(servo_buses) != 3:
+            raise ValueError("servo_buses must be a list or tuple of exactly 3 integers.")
 
-    # lift arm 
-    servo_arm.speed = 0.1 #move up 
-    sleep_ms(500)
-    servo_arm.speed = 0 
+        bottom_bus, arm_bus, claw_bus = servo_buses
 
+        self.controller = PiicoDev_Servo_Driver()
 
-def pickup_right(): 
-    #lower arm 
-    servo_arm.speed = -0.1 
-    sleep_ms(500)
-    servo_arm.speed = 0
+        self.servo_bottom = PiicoDev_Servo(self.controller, bottom_bus, midpoint_us=1400, range_us=1800)
+        self.servo_arm = PiicoDev_Servo(self.controller, arm_bus, midpoint_us=1500, range_us=1800)
+        self.servo_claw = PiicoDev_Servo(self.controller, claw_bus)
 
-    #grab bin 
-    servo_claw.angle = 90 
-    sleep_ms(1000)
+    def pickup_left(self):
+        """
+        Executes the pickup routine on the left side:
+        - Lowers the arm
+        - Closes the claw to grab a bin
+        - Lifts the arm
+        """
+        print("Starting pickup procedure (left)")
+        self.servo_arm.speed = -0.1  # lower arm
+        sleep_ms(1500)
+        self.servo_arm.speed = 0
 
-    #lift arm 
-    servo_arm.speed = 0.1
-    sleep_ms(1500)
-    servo_arm.speed = 0 
+        self.servo_claw.angle = 90  # close claw
+        sleep_ms(1000)
 
-
-def release(bin_colour): 
-    if bin_colour == 'red': 
-        servo_bottom.speed = 0.1 #rotate bottom servo cw 
-        sleep_ms(900)
-        servo_bottom.speed = 0 
-        servo_arm.speed = 0.1 #tilt arm backwards 
-        sleep_ms(900)
-        servo_arm.speed = 0 
-
-        #return red bin to original position 
-        servo_bottom.speed = 0.1 #rotate 90 deg 
-        sleep_ms(900) 
-        servo_bottom.speed = 0 
-        servo_arm.speed = 0.1 #lower arm 
-        sleep_ms(900) 
-        servo_arm.speed = 0
-        servo_claw.angle = 0 #open claw 
-    
-    else: 
-        servo_bottom.speed = -0.1 #rotate cw or ccw ? (test)
-        sleep_ms(900)
-        servo_bottom.speed = 0 
-        servo_arm.speed = 0.1 #tilt arm backwards 
-        sleep_ms(900)
-        servo_arm.speed = 0 
-        
-        #return yellow bin to original position 
-        servo_bottom.speed = 0.1 #rotate 90 deg 
-        sleep_ms(900)
-        servo_bottom.speed = 0 
-        servo_arm.speed = 0.1 #lower arm 
+        self.servo_arm.speed = 0.1  # lift arm
         sleep_ms(500)
-        servo_arm.angle = 0 
-        servo_claw.angle = 0 #open claw 
+        self.servo_arm.speed = 0
 
-
-        #return arm to centre position 
-        servo_arm.speed = 0.1 
+    def pickup_right(self):
+        """
+        Executes the pickup routine on the right side:
+        - Lowers the arm
+        - Closes the claw to grab a bin
+        - Lifts the arm
+        """
+        print("Starting pickup procedure (right)")
+        self.servo_arm.speed = -0.1  # lower arm
         sleep_ms(500)
-        servo_arm.speed = 0 
-        servo_bottom = 0.1 #rotate base 90 deg 
-        sleep_ms(500)
-        servo_bottom.speed = 0 
+        self.servo_arm.speed = 0
 
+        self.servo_claw.angle = 90  # close claw
+        sleep_ms(1000)
 
+        self.servo_arm.speed = 0.1  # lift arm
+        sleep_ms(1500)
+        self.servo_arm.speed = 0
 
+    def release(self, bin_colour):
+        """
+        Releases a bin based on its color by rotating and tilting the arm,
+        then opening the claw and returning to the default position.
 
+        Args:
+            bin_colour (str): The color of the bin to release. 
+                Must be either 'red' or another supported color (e.g., 'yellow').
+        """
+        print(f"Releasing bin: {bin_colour}")
+        if bin_colour == 'red':
+            # Rotate and tilt for red bin
+            self.servo_bottom.speed = 0.1
+            sleep_ms(900)
+            self.servo_bottom.speed = 0
 
+            self.servo_arm.speed = 0.1
+            sleep_ms(900)
+            self.servo_arm.speed = 0
 
+            # Return to original position
+            self.servo_bottom.speed = 0.1
+            sleep_ms(900)
+            self.servo_bottom.speed = 0
 
-## 45RPM -> ms timings
-## 90 degrees (1/4 rotation) --> 333.3
-## 180 degrees (1/4 rotation) --> 667.2
-## 270 degrees (1/4 rotation) --> 1000
-## 360 degrees (1/4 rotation) --> 1333.3
+            self.servo_arm.speed = 0.1
+            sleep_ms(900)
+            self.servo_arm.speed = 0
 
+            self.servo_claw.angle = 0  # open claw
+
+        else:
+            # Rotate and tilt for other bin (e.g. yellow)
+            self.servo_bottom.speed = -0.1
+            sleep_ms(900)
+            self.servo_bottom.speed = 0
+
+            self.servo_arm.speed = 0.1
+            sleep_ms(900)
+            self.servo_arm.speed = 0
+
+            # Return to original position
+            self.servo_bottom.speed = 0.1
+            sleep_ms(900)
+            self.servo_bottom.speed = 0
+
+            self.servo_arm.speed = 0.1
+            sleep_ms(500)
+            self.servo_arm.speed = 0
+
+            self.servo_claw.angle = 0  # open claw
+
+            # Reset arm and base
+            self.servo_arm.speed = 0.1
+            sleep_ms(500)
+            self.servo_arm.speed = 0
+
+            self.servo_bottom.speed = 0.1
+            sleep_ms(500)
+            self.servo_bottom.speed = 0
