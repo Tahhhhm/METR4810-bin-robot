@@ -2,12 +2,13 @@ from ultralytics import YOLO
 import cv2
 
 # Load your model
-model = YOLO("Models/bin_detection_best.pt")
+model = YOLO("/home/amaana/Desktop/servo/venv/Models/bin_detection_best.pt")
 
 # Open camera
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+cap.set(cv2.CAP_PROP_XI_FRAMERATE, 1)
 
 frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 middle_x = frame_width // 2  # vertical divider
@@ -17,7 +18,7 @@ while True:
     if not ret:
         break
 
-    results = model(frame, imgsz=640, verbose=False)
+    results = model(frame, imgsz=320, verbose=False)
     annotated = results[0].plot()
 
     # Draw a dividing line in the middle
@@ -38,7 +39,7 @@ while True:
         else:
             side = "right"
         
-        binlocation = f"{side}{label}"
+        binlocation = f"{label}{side}"
         
         print(binlocation)
 
@@ -46,7 +47,7 @@ while True:
         cv2.putText(
             annotated,
             f"{label} ({side})",
-            (int(x1), int(y1) - 10),
+            (int(x1), int(y1)+300),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.6,
             (255, 255, 0),
