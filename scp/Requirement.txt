@@ -1,0 +1,10 @@
+-- Machine Vision --
+ultralytics
+-- Motor --
+gpiozero
+time
+-- Servo --
+piicodev
+-- CircuitPython --
+adafruit-circuitpython-tca9548a
+blinka
