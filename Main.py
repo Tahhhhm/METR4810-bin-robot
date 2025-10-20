@@ -5,7 +5,7 @@ import MOTOR_CODE
 #colour_sensor2 = Colour_sensor.ColourSensor(channel=1)
 #colour_sensor3 = Colour_sensor.ColourSensor(channel=2)
 #colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
-u_sensor = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=23, echo_pin=24)
+#u_sensor = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=23, echo_pin=24)
 import time
 motor_assembly = MOTOR_CODE.Motor(23, 24, 17, 27, 18, 2) # This is what we're using on the prototype
 motor_assembly.forward()
