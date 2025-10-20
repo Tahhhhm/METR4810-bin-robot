@@ -12,5 +12,6 @@ while True:
     servo_arm.angle = -90
     sleep(2)
     servo_arm.angle = 90
+    break
 sleep(2)
 
