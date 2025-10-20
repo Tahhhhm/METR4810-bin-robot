@@ -7,7 +7,7 @@ from PiicoDev_Servo import PiicoDev_Servo, PiicoDev_Servo_Driver
 controller = PiicoDev_Servo_Driver() 
 
 # Simple setup: Attach a servo to channel 1 of the controller with default properties
-servo = PiicoDev_Servo(controller, 4)
+servo = PiicoDev_Servo(controller, 1)
 
 # Customised setup - Attach a servo to channel 1 of the controller with the following properties:
 #    - min_us: the minimum expected pulse length (microsecconds)
