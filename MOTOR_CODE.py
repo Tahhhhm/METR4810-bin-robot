@@ -60,6 +60,9 @@ class Motor:
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.LOW)
         GPIO.output(self.EnB, GPIO.LOW)
+        
+    def processTiles(tile_list):
+        return 
     
     """
     def turn(degree, speed=1.0):
