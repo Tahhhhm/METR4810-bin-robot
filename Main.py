@@ -8,7 +8,8 @@ import MOTOR_CODE
 #u_sensor = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=23, echo_pin=24)
 import time
 motor_assembly = MOTOR_CODE.Motor(23, 24, 17, 27, 18, 2) # This is what we're using on the prototype
-motor_assembly.forward()
+while True:
+    motor_assembly.forward()
 
 #while True:
     #colour_sensor1.readRGB()
