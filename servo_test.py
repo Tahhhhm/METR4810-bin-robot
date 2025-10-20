@@ -12,7 +12,8 @@ while True:
         servo_arm.angle = i
         print(f"Servo angle set to: {i} degrees")
         sleep(0.5)
-    i =-90
+    i =-180
+    
 
 
 
