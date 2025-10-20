@@ -53,22 +53,15 @@ def obstacle_check():
     else:
         print("No obstacle.")
         
-def queueTiles(road_tile_list):
-    next_tile = road_tile_list[:-1]
-    if next_tile == "left curve" | "left_hairpin":
-        return  
-    if next_tile == "right_curve" | "right_hairpin":
-        return
-    if next_tile == "straight" | 
-
-    
+        
+            
     
 
 # Navigate (near entire) track to find delivery zones and bins
 if __name__ == "runtime":
     bin_list = models.detect_bin()
     road_tile_list = models.detect_road()
-    queueTiles(road_tile_list)
+    motor_assembly.processTiles(road_tile_list)
     
     
 

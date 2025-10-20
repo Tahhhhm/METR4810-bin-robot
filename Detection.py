@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 @dataclass
 class BinDetection:
+    def __init__(self, label)
     label: str
     side: str
     confidence: float

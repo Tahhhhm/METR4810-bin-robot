@@ -1,5 +1,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
+import random
+
 
 
 # Initialize motors (adjust GPIO pins accordingly)
@@ -21,37 +23,42 @@ class Motor:
         GPIO.setup(EnA, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(EnB, GPIO.OUT, initial=GPIO.LOW)
  
-    def forward(self):
+    def forward(self, tile_list):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)
         GPIO.output(self.EnA, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.HIGH)
         GPIO.output(self.in4, GPIO.LOW)
         GPIO.output(self.EnB, GPIO.HIGH)
+        tile_list.pop(0)
+        
 
-    def backward(self):
+    def backward(self, tile_list):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.HIGH)
         GPIO.output(self.EnA, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.HIGH)
         GPIO.output(self.EnB, GPIO.HIGH)
+        tile_list.pop(0)
 
-    def turn_left(self):
+    def turn_left(self, tile_list):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.HIGH)
         GPIO.output(self.EnA, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.HIGH)
         GPIO.output(self.in4, GPIO.LOW)
         GPIO.output(self.EnB, GPIO.HIGH)
+        tile_list.pop(0)
 
-    def turn_right(self):
+    def turn_right(self, tile_list):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)
         GPIO.output(self.EnA, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.HIGH)
         GPIO.output(self.EnB, GPIO.HIGH)
+        tile_list.pop(0)
 
     def stop(self):
         GPIO.output(self.in1, GPIO.LOW)
@@ -61,8 +68,26 @@ class Motor:
         GPIO.output(self.in4, GPIO.LOW)
         GPIO.output(self.EnB, GPIO.LOW)
         
-    def processTiles(tile_list):
-        return 
+    def processTiles(self, tile_list, side):
+        tile=tile_list[0]
+        if tile == "straight" or "Chicane" :
+            self.forward(tile_list)
+        elif tile == "Right_turn" or "right_hairpin":
+            self.turn_right(tile_list)
+        elif tile == "left_curve" or "left_hairpin":
+            self.turn_left(tile_list)
+        elif tile == "crossroad":
+            choice = random.choice(["forward", "right", "left"])
+            
+            if choice == "forward":
+                self.forward(tile_list)
+            elif choice == "right":
+                self.turn_right(tile_list)
+            elif choice == "left":
+                self.turn_left(tile_list)
+
+ 
+            
     
     """
     def turn(degree, speed=1.0):
