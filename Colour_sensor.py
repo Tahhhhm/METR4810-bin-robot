@@ -2,7 +2,7 @@ from PiicoDev_VEML6040 import PiicoDev_VEML6040
 from PiicoDev_Unified import sleep_ms
 import smbus2 as smbus
 MUX_ADDR = 0x70
-bus = smbus.SMBus(1)
+bus = smbus.SMBus(0)
 
 class ColourSensor:
     def __init__(self, channel):
