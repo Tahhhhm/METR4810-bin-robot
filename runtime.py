@@ -55,7 +55,11 @@ def obstacle_check():
         
 def queueTiles(road_tile_list):
     next_tile = road_tile_list[:-1]
-    if next_tile == "left curve":
+    if next_tile == "left curve" | "left_hairpin":
+        return  
+    if next_tile == "right_curve" | "right_hairpin":
+        return
+    if next_tile == "straight" | 
 
     
     
