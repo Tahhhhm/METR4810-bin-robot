@@ -9,6 +9,7 @@ import MOTOR_CODE
 import time
 motor_assembly = MOTOR_CODE.Motor(23, 24, 17, 27, 18, 2) # This is what we're using on the prototype
 while True:
+    time.sleep(2)
     motor_assembly.forward()
     time.sleep(1)
     motor_assembly.stop()
