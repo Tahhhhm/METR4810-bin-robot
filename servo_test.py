@@ -2,9 +2,15 @@
 from gpiozero import AngularServo
 from time import sleep
 
-servo = AngularServo(18, min_angle = -90, max_angle=90) #arm 
-servo.angle = 0 # mid-point 
+min_angle = -90
+max_angle = 90
+servo_arm = AngularServo(18, min_angle=min_angle, max_angle=max_angle)
+
+servo_arm.angle = 0
+print("Servo set to 0 degrees")
 sleep(2)
 
-servo.angle = 90
-sleep(2)
+
+
+
+

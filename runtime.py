@@ -4,12 +4,19 @@ from MOTOR_CODE import MotorController
 from SERVO_CODE import ServoController
 from ULTRASONIC_CODE import DistanceSensor
 import time
+import Colour_sensor 
 
 motor_assembly = MotorController([23, 24, 17, 27]) # This is what we're using on the prototype
 servo_assembly = ServoController([0, 1 ,2])
 detector = DistanceSensor(trigger_pin=17, echo_pin=27)
+colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
+colour_sensor2 = Colour_sensor.ColourSensor(channel=1)
+colour_sensor3 = Colour_sensor.ColourSensor(channel=2)
+colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
 outside_bounds = False
 on_green = False
+
+
 
 def boundary_check():
     return on_green
