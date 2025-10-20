@@ -25,8 +25,3 @@ servo.angle = 180
 sleep_ms(1000)
 servo.angle = 0
 sleep_ms(2000)
-
-# Sweep the servo slowly 0->180°
-for x in range(0,180,5):
-    servo.angle = x
-    sleep_ms(40)
