@@ -9,10 +9,7 @@ class ObstacleDetector:
         try:
             while True:
                 distance = self.sensor.distance * 100  # convert to cm
-                if distance < 15:
-                    return True
-                else:
-                    return False
+                print(distance)
         except KeyboardInterrupt:
             print("Stopped")
             return None

@@ -1,23 +1,29 @@
 # This code combines all the functions and models and lays out operational procedure of the METR4810
 # Miniturized Garbage Bin Prototype
-from MOTOR_CODE import MotorController
+from MOTOR_CODE import Motor
 from SERVO_CODE import ServoController
-from ULTRASONIC_CODE import DistanceSensor
+from ULTRASONIC_CODE import ObstacleDetector
+from Detection import AI
+from time import sleep
+from gpiozero import AngularServo
 import time
 import Colour_sensor 
+import RPi.GPIO as GPIO
 
-motor_assembly = MotorController([23, 24, 17, 27]) # This is what we're using on the prototype
-servo_assembly = ServoController([0, 1 ,2])
-detector = DistanceSensor(trigger_pin=17, echo_pin=27)
+
+motor_assembly = Motor(23, 24, 17, 27, 2, 3) # This is what we're using on the prototype
+servo_assembly = ServoController(0, 1 ,2)
+detector = ObstacleDetector(trigger_pin=17, echo_pin=27)
 colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
 colour_sensor2 = Colour_sensor.ColourSensor(channel=1)
 colour_sensor3 = Colour_sensor.ColourSensor(channel=2)
 colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
+models = AI()
 outside_bounds = False
 on_green = False
+move_list = []
 
-
-
+#Keeps robot on track and avoid obstacles
 def boundary_check():
     return on_green
 
@@ -46,8 +52,18 @@ def obstacle_check():
 
     else:
         print("No obstacle.")
+        
+        
+            
+    
 
 # Navigate (near entire) track to find delivery zones and bins
+if __name__ == "runtime":
+    bin_list = models.detect_bin()
+    road_tile_list = models.detect_road()
+    motor_assembly.processTiles(road_tile_list)
+    
+    
 
 # Use A* search algorithm to compute the shortest path to each bin
 
