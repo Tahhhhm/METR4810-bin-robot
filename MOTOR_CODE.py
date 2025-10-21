@@ -23,7 +23,7 @@ class Motor:
         GPIO.setup(EnA, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(EnB, GPIO.OUT, initial=GPIO.LOW)
  
-    def forward(self, tile_list):
+    def forward(self):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)
         GPIO.output(self.EnA, GPIO.HIGH)
@@ -33,7 +33,7 @@ class Motor:
         tile_list.pop(0)
         
 
-    def backward(self, tile_list):
+    def backward(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.HIGH)
         GPIO.output(self.EnA, GPIO.HIGH)
@@ -42,23 +42,23 @@ class Motor:
         GPIO.output(self.EnB, GPIO.HIGH)
         tile_list.pop(0)
 
-    def turn_left(self, tile_list):
+    def turn_left(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.HIGH)
         GPIO.output(self.EnA, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.HIGH)
         GPIO.output(self.in4, GPIO.LOW)
         GPIO.output(self.EnB, GPIO.HIGH)
-        tile_list.pop(0)
 
-    def turn_right(self, tile_list):
+
+    def turn_right(self):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)
         GPIO.output(self.EnA, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.HIGH)
         GPIO.output(self.EnB, GPIO.HIGH)
-        tile_list.pop(0)
+        
 
     def stop(self):
         GPIO.output(self.in1, GPIO.LOW)
