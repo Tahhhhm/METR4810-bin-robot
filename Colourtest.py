@@ -9,8 +9,7 @@ bus = smbus.SMBus(1)
 class ColourSensor:
     def __init__(self, channel):
         bus.write_byte(MUX_ADDR, 1 << channel)
-        # Use longest integration time for more stable readings
-        self.colourSensor = PiicoDev_VEML6040(integration_time=320)
+        self.colourSensor = PiicoDev_VEML6040()  # default constructor
         self.channel = channel
 
     def readRGB(self, samples=5):
@@ -22,13 +21,13 @@ class ColourSensor:
             data = self.colourSensor.readRGB()
             for k in total:
                 total[k] += data[k]
-            sleep_ms(50)  # short delay between samples
+            sleep_ms(50)  # small delay between samples
 
         # Average the readings
         averaged = {k: total[k] / samples for k in total}
 
         # Normalize to 0-255 based on max value
-        max_val = max(averaged.values()) or 1  # prevent division by zero
+        max_val = max(averaged.values()) or 1  # avoid division by zero
         normalized = {k: int(255 * v / max_val) for k, v in averaged.items()}
 
         print(f"{normalized['blue']} Blue  {normalized['green']} Green  {normalized['red']} Red")
@@ -38,6 +37,7 @@ class ColourSensor:
         """Return only the normalized green value"""
         data = self.readRGB(samples)
         return data['green']
+
 
 # ---------------------------
 # Create a ColourSensor object
