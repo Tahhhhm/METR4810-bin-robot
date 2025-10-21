@@ -5,20 +5,16 @@ from PiicoDev_Servo import PiicoDev_Servo, PiicoDev_Servo_Driver
 controller = PiicoDev_Servo_Driver()
 
 # Create servo object on channel 4
-servo4 = PiicoDev_Servo(controller, 1, midpoint_us=1500, range_us=1800)
+arm = PiicoDev_Servo(controller, 1, midpoint_us=1500, range_us=1800)
+grabber = PiicoDev_Servo(controller, 2)
+axial = PiicoDev_Servo(controller, 3, midpoint_us=1500, range_us=1800)
 
 print("Starting autonomous servo motion...")
 
-try:
-    # Move forward slowly
-    print("Moving forward...")
-    servo4.speed = 0.1
-    sleep_ms(1000)
-    print("stop")
-    servo4.speed = 0
-    sleep_ms(10000)
-
-except KeyboardInterrupt:
-    # Stop the servo safely if user ends the program
-    print("\nProgram interrupted. Stopping servo...")
-    servo4.speed = 0
+# Move forward slowly
+print("Moving forward...")
+arm.speed = -0.5
+sleep_ms(1000)
+print("stop")
+arm.speed = 0
+sleep_ms(10000)
