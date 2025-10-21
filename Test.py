@@ -1,12 +1,37 @@
-from PiicoDev_Servo import PiicoDev_Servo, PiicoDev_Servo_Driver
 from PiicoDev_Unified import sleep_ms
+from PiicoDev_Servo import PiicoDev_Servo, PiicoDev_Servo_Driver
 
+# Initialize the servo controller
 controller = PiicoDev_Servo_Driver()
-servo = PiicoDev_Servo(controller, 1, midpoint_us=1500, range_us=1800)
 
-print("Testing servo angles...")
+# Create servo object on channel 4
+servo4 = PiicoDev_Servo(controller, 4, midpoint_us=1500, range_us=1800)
 
-for angle in [0, 90, 180, 90, 0]:
-    print("Angle:", angle)
-    servo.angle = angle
+print("Starting autonomous servo motion...")
+
+try:
+    # Move forward slowly
+    print("Moving forward...")
+    servo4.speed = 0.3
     sleep_ms(3000)
+
+    # Stop for a moment
+    print("Stopping...")
+    servo4.speed = 0
+    sleep_ms(1000)
+
+    # Reverse
+    print("Reversing...")
+    servo4.speed = -0.3
+    sleep_ms(3000)
+
+    # Stop again
+    print("Stopping...")
+    servo4.speed = 0
+
+    print("Motion complete.")
+
+except KeyboardInterrupt:
+    # Stop the servo safely if user ends the program
+    print("\nProgram interrupted. Stopping servo...")
+    servo4.speed = 0
