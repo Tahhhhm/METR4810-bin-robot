@@ -14,6 +14,6 @@ print("Starting autonomous servo motion...")
 # Move forward slowly
 print("picking left bin")
 arm.speed = -0.3
-sleep_ms(1400)
+sleep_ms(1200)
 arm.speed = 0
 sleep_ms(1000)
