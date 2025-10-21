@@ -12,9 +12,8 @@ axial = PiicoDev_Servo(controller, 3, midpoint_us=1500, range_us=1800)
 print("Starting autonomous servo motion...")
 
 # Move forward slowly
-print("Moving forward...")
-arm.speed = 0.6
+print("picking left bin")
+arm.speed = -0.3
 sleep_ms(1000)
-print("stop")
 arm.speed = 0
-sleep_ms(10000)
+sleep_ms(1000)
