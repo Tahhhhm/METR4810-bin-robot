@@ -13,7 +13,7 @@ print("Starting autonomous servo motion...")
 
 # Move forward slowly
 print("Moving forward...")
-arm.speed = -0.5
+arm.speed = 0.6
 sleep_ms(1000)
 print("stop")
 arm.speed = 0
