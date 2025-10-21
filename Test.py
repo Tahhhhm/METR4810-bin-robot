@@ -13,11 +13,11 @@ print("Starting autonomous servo motion...")
 
 # Move forward slowly
 print("picking left bin")
+grabber.angle = 135
+sleep_ms(1000)
+grabber.angle = 180
+sleep_ms(1000)
 grabber.angle = 0
-sleep_ms(1000)
-grabber.angle = 45
-sleep_ms(1000)
-grabber.angle = 90
 sleep_ms(1000)
 """ arm.speed = -0.3
 sleep_ms(1200)
