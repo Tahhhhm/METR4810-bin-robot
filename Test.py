@@ -12,7 +12,7 @@ print("Starting autonomous servo motion...")
 try:
     # Move forward slowly
     print("Moving forward...")
-    servo4.speed = 0.1
+    servo4.speed = 0
     sleep_ms(10000)
 
 except KeyboardInterrupt:
