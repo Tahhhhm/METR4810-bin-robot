@@ -21,7 +21,7 @@ colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
 models = AI()
 outside_bounds = False
 on_green = False
-move_list = []
+move_list = ["straight"]
 
 #Keeps robot on track and avoid obstacles
 def boundary_check():
