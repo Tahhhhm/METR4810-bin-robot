@@ -9,4 +9,4 @@ print("Testing servo angles...")
 for angle in [0, 90, 180, 90, 0]:
     print("Angle:", angle)
     servo.angle = angle
-    sleep_ms(1000)
+    sleep_ms(3000)
