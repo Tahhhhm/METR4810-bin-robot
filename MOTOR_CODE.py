@@ -30,8 +30,7 @@ class Motor:
         GPIO.output(self.in3, GPIO.HIGH)
         GPIO.output(self.in4, GPIO.LOW)
         GPIO.output(self.EnB, GPIO.HIGH)
-        tile_list.pop(0)
-        
+
 
     def backward(self):
         GPIO.output(self.in1, GPIO.LOW)
@@ -40,7 +39,7 @@ class Motor:
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.HIGH)
         GPIO.output(self.EnB, GPIO.HIGH)
-        tile_list.pop(0)
+
 
     def turn_left(self):
         GPIO.output(self.in1, GPIO.LOW)
