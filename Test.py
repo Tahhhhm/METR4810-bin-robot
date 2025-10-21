@@ -12,8 +12,6 @@ print("Starting autonomous servo motion...")
 try:
     # Move forward slowly
     print("Moving forward...")
-    servo4.speed = 0.1
-    sleep_ms(1000)
     servo4.speed = 0
     sleep_ms(10000)
 
