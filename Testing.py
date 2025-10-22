@@ -29,21 +29,18 @@ def camera_listener():
     return
 
 
-def color_sensor_listener():
+def sensor_listener():
     """
     Continuously monitors the color sensors to detect bin alignment.
     Updates the global variable `bin_aligned` based on sensor readings.
     """
-    global bin_aligned , bin_location, program_running
+    global bin_aligned , bin_location, program_running, next_road
     while program_running:
         rgbL = colour_sensor1.read() # Left sensor
         rgbR = colour_sensor2.read() # Right sensor
         green_valueL = rgbL['green']
         green_valueR = rgbR['green']
-
-        next_tile = camera.detect_road()
-        motor_assembly.processTiles(next_tile, tiles)
-
+        next_road = camera.detect_road()
         if green_valueL >= GREEN_THRESHOLD:
             bin_aligned = True
             bin_location = "left"
@@ -83,6 +80,8 @@ def start_mode():
     print('starting...')
     global bin_aligned
     while not switch_requested and program_running:
+        if next_road != None:
+            print("Next road detected:", next_road)
         if bin_aligned == False:
             motor_assembly.forward()
         elif bin_aligned == True:
@@ -120,8 +119,8 @@ def main():
     # Start the input listener in a separate thread
     listener_thread = threading.Thread(target=input_listener, daemon=True)
     listener_thread.start()
-    colour_sensor_listener_thread = threading.Thread(target=color_sensor_listener, daemon=True)
-    colour_sensor_listener_thread.start()
+    sensor_listener_thread = threading.Thread(target=sensor_listener, daemon=True)
+    sensor_listener_thread.start()
 
 
     global switch_requested
