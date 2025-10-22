@@ -2,19 +2,6 @@ from ultralytics import YOLO
 import cv2
 from dataclasses import dataclass
 
-@dataclass
-class BinDetection:
-    def __init__(self, label)
-    label: str
-    side: str
-    confidence: float
-
-@dataclass
-class RoadDetection:
-    label: str
-    confidence: float
-
-
 class AI:
     def __init__(self):
         self.road_detection_model = YOLO("model/Road_detection.pt")    
