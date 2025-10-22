@@ -30,4 +30,6 @@ sleep_ms(1000)
 # axial.speed = -0.8
 # sleep_ms(1000)
 axial.speed = 0
+print("stopping")
 sleep_ms(3000)
+print("end")
