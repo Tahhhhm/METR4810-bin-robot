@@ -3,9 +3,6 @@ from time import sleep
 import random
 
 
-
-# Initialize motors (adjust GPIO pins accordingly)
-
 class Motor:
     def __init__(self, in1, in2, in3, in4, EnA, EnB):
         self.in1 = in1
@@ -14,174 +11,148 @@ class Motor:
         self.in4 = in4
         self.EnA = EnA
         self.EnB = EnB
+
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(in1, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(in2, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(in3, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(in3, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(in4, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(EnA, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(EnB, GPIO.OUT, initial=GPIO.LOW)
- 
+        GPIO.setwarnings(False)
+
+        # Setup GPIO pins
+        pins = [in1, in2, in3, in4, EnA, EnB]
+        for pin in pins:
+            GPIO.setup(pin, GPIO.OUT)
+            GPIO.output(pin, GPIO.LOW)
+
     def forward(self):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)
         GPIO.output(self.EnA, GPIO.HIGH)
+
         GPIO.output(self.in3, GPIO.HIGH)
         GPIO.output(self.in4, GPIO.LOW)
         GPIO.output(self.EnB, GPIO.HIGH)
-
 
     def backward(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.HIGH)
         GPIO.output(self.EnA, GPIO.HIGH)
+
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.HIGH)
         GPIO.output(self.EnB, GPIO.HIGH)
-
 
     def turn_left(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.HIGH)
         GPIO.output(self.EnA, GPIO.HIGH)
+
         GPIO.output(self.in3, GPIO.HIGH)
         GPIO.output(self.in4, GPIO.LOW)
         GPIO.output(self.EnB, GPIO.HIGH)
-
 
     def turn_right(self):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)
         GPIO.output(self.EnA, GPIO.HIGH)
+
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.HIGH)
         GPIO.output(self.EnB, GPIO.HIGH)
-        
 
     def stop(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.LOW)
         GPIO.output(self.EnA, GPIO.LOW)
+
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.LOW)
         GPIO.output(self.EnB, GPIO.LOW)
-        
-    def processTiles(self, tile_list, side):
-        tile=tile_list[0]
-        if tile == "straight" or "Chicane" :
-            self.forward(tile_list)
-        elif tile == "Right_turn" or "right_hairpin":
-            self.turn_right(tile_list)
-        elif tile == "left_curve" or "left_hairpin":
-            self.turn_left(tile_list)
-        elif tile == "crossroad":
-            choice = random.choice(["forward", "right", "left"])
-            
-            if choice == "forward":
-                self.forward(tile_list)
-            elif choice == "right":
-                self.turn_right(tile_list)
-            elif choice == "left":
-                self.turn_left(tile_list)
 
- 
-            
-    
-    """
-    def turn(degree, speed=1.0):
-        
-        Turns the robot by a specified degree.
-        Positive = Clockwise (right turn)
-        Negative = Counter-clockwise (left turn)
-        
-        # Simple estimation: 90 degrees ≈ 0.5 seconds (need to calibrate this)
-        turn_time = abs(degree) / 90.0 * 0.5  # adjust 0.5 based on real-world testing
+    def turn(self, degree):
+        # Turns the robot by a specified degree
+        # Positive = Clockwise (right), Negative = Counter-clockwise (left)
+        turn_time = abs(degree) / 90.0 * 0.5  # Adjust 0.5 as per calibration
 
         if degree > 0:
-            # Clockwise: left forward, right backward
-            motor_left.forward(speed)
-            motor_right.backward(speed) # REPLACE VALUE ON TESTING
+            self.turn_right()
         elif degree < 0:
-            # Anticlockwise: left backward, right forward
-            motor_left.backward(speed)
-            motor_right.forward(speed)  # REPLACE VALUE ON TESTING
+            self.turn_left()
         else:
-            return  # No turning
+            return
 
         sleep(turn_time)
-        stop()
+        self.stop()
 
+    def straight(self):
+        self.forward()
+        sleep(5.5)
+        self.stop()
 
-
-
-# --- Motion Macros (based on your Arduino logic) ---
-
-def straight():
-    fwd()
-    sleep(5.5)
-
-def hairpin(dir):
-    if dir == "right":
-        fwd()
+    def hairpin(self, direction):
+        self.forward()
         sleep(2)
-        stop()
-        turn(-90)
-        fwd()
+        self.stop()
+        if direction == "right":
+            self.turn(-90)
+        else:
+            self.turn(90)
+        self.forward()
         sleep(1)
-    else:
-        fwd()
-        sleep(2)
-        stop()
-        turn(90)
-        fwd()
-        sleep(1)
+        self.stop()
 
-def curve(dir):
-    if dir == "left":
-        fwd()
+    def curve(self, direction):
+        self.forward()
         sleep(2)
-        stop()
-        turn(75)
-        fwd()
+        self.stop()
+        if direction == "left":
+            self.turn(75)
+        else:
+            self.turn(-75)
+        self.forward()
         sleep(0.5)
-    else:
-        fwd()
+        self.stop()
+
+    def crossroad(self, direction):
+        self.forward()
         sleep(2)
-        stop()
-        turn(-75)
-        fwd()
-        # Duration for final movement after turn not specified, assuming 0.5
-        sleep(0.5)
+        if direction == "forward":
+            self.forward()
+            sleep(1)
+        elif direction == "left":
+            self.turn(45)
+            self.forward()
+            sleep(1.5)
+        elif direction == "right":
+            self.turn(-45)
+            self.forward()
+            sleep(1.5)
+        else:
+            self.forward()
+            sleep(5)
+        self.stop()
 
-def crossroad(dir):
-    fwd()
-    sleep(2)
-    if dir == "fwd":
-        fwd()
-        sleep(1)
-    elif dir == "left":
-        turn(45)
-        fwd()
+    def delivery_point(self):
+        self.forward()
         sleep(1.5)
-    elif dir == "right":
-        turn(-45)
-        fwd()
-        sleep(1.5)
-    else:
-        fwd()
-        sleep(5)
+        self.stop()
 
-def delivery_point():
-    fwd()
-    sleep(1.5)
+    def process_tiles(self, next_tile, tile_list):
+        tile_list.append(next_tile)
+        tile = tile_list[0]
 
-# Main loop simulation
-if __name__ == '__main__':
-    fwd(speed=0.8)
-    bwd(speed=0.8)
-    turn(degree=90, speed=0.8)
-    turn(degree=-90, speed=0.8)
+        if tile in ["straight", "Chicane"]:
+            self.straight()
 
-    stop()
-"""
+        elif tile in ["Right_turn", "right_hairpin"]:
+            self.turn_right()
+            sleep(1)
+            self.stop()
+
+        elif tile in ["left_curve", "left_hairpin"]:
+            self.turn_left()
+            sleep(1)
+            self.stop()
+
+        elif tile == "crossroad":
+            direction = random.choice(["forward", "right", "left"])
+            self.crossroad(direction)
+
+        tile_list.pop(0)
