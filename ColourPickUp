@@ -22,4 +22,4 @@ while True:
     else:
         print("No green detected.")
 
-    sleep_ms(500)  # adjust frequency of checks
+    
