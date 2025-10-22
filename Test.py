@@ -23,7 +23,7 @@ print("Starting autonomous servo motion...")
 # arm.speed = 0
 # sleep_ms(1000) 
 
-axial.speed = 1
+axial.speed = 0.5
 sleep_ms(2000)
-axial.speed = -1
+axial.speed = -0.5
 sleep_ms(2000)
