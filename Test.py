@@ -13,7 +13,7 @@ controller = PiicoDev_Servo_Driver()
 # Create servo object on channel 4
 arm = PiicoDev_Servo(controller, 1, midpoint_us=1500, range_us=1800)
 grabber = PiicoDev_Servo(controller, 2)
-axial = PiicoDev_Servo(controller, 3, midpoint_us=1500, range_us=1800)
+axial = PiicoDev_Servo(controller, 3, midpoint_us=1480, range_us=1800)
 
 print("Starting autonomous servo motion...")
 
@@ -25,9 +25,9 @@ print("Starting autonomous servo motion...")
 
 axial.speed = 0.8
 sleep_ms(1000)
-axial.speed = 0
-sleep_ms(1500)
-axial.speed = -0.8
-sleep_ms(1000)
+# axial.speed = 0
+# sleep_ms(1500)
+# axial.speed = -0.8
+# sleep_ms(1000)
 axial.speed = 0
 sleep_ms(3000)
