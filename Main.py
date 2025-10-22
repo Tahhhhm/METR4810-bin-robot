@@ -3,16 +3,51 @@ import ULTRASONIC_CODE
 import MOTOR_CODE
 import threading
 import time
-
+import Detection
 current_mode = "idle"
 switch_requested = False
 program_running = True
+GREEN_THRESHOLD = 400 
+bin_aligned = False
+off_road = False
+bin_location = None
+next_road = None
+
+
 motor_assembly = MOTOR_CODE.Motor(17, 27, 22, 23, 24, 18)
 colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
 colour_sensor2 = Colour_sensor.ColourSensor(channel=1)
 colour_sensor3 = Colour_sensor.ColourSensor(channel=2)
 colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
 ultrasonic = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=23, echo_pin=24)
+
+def camera_listener():
+    camera= Detection.AI()
+
+    return
+
+
+def color_sensor_listener():
+    """
+    Continuously monitors the color sensors to detect bin alignment.
+    Updates the global variable `bin_aligned` based on sensor readings.
+    """
+    global bin_aligned , bin_location, program_running
+    while program_running:
+        rgbL = colour_sensor1.readRGB() # Left sensor
+        rgbR = colour_sensor2.readRGB() # Right sensor
+        green_valueL = rgbL['green']
+        green_valueR = rgbR['green']
+        if green_valueL >= GREEN_THRESHOLD:
+            bin_aligned = True
+            bin_location = "left"
+        elif green_valueR >= GREEN_THRESHOLD:
+            bin_aligned = True
+            bin_location = "right"
+        else:
+            bin_aligned = False
+            bin_location = None
+        time.sleep(0.5)  # Polling interval
 
 def input_listener():
     """
@@ -32,6 +67,7 @@ def input_listener():
             program_running = False
             switch_requested = True  # To break current mode loop
 
+
 def idle_mode():
     print("[IDLE MODE] Running... (type 'switch <mode>')")
     while not switch_requested and program_running:
@@ -39,9 +75,18 @@ def idle_mode():
 
 def start_mode():
     print('starting...')
+    global bin_aligned
     while not switch_requested and program_running:
-        motor_assembly.forward()
-        #code everything for detection etc
+        if bin_aligned == False:
+            motor_assembly.forward()
+        elif bin_aligned == True:
+             motor_assembly.stop()
+             if bin_location == "left":
+                print("Picking up bin on the left")
+                #servo pickup code for left bin
+             elif bin_location == "right":
+                print("Picking up bin on the right")
+                #servo pickup code for left bin
 
 def return_mode():
     print("returning...")
@@ -69,6 +114,9 @@ def main():
     # Start the input listener in a separate thread
     listener_thread = threading.Thread(target=input_listener, daemon=True)
     listener_thread.start()
+    colour_sensor_listener_thread = threading.Thread(target=color_sensor_listener, daemon=True)
+    colour_sensor_listener_thread.start()
+
 
     global switch_requested
 
@@ -77,6 +125,7 @@ def main():
         switch_requested = False
         mode_function()  # Run the selected mode
         print(f">>> Switching mode to '{current_mode}'...\n")
+
 
     print("Program exited.")
 
