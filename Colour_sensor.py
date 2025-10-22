@@ -10,7 +10,7 @@ class ColourSensor:
         self.colourSensor = PiicoDev_VEML6040()
         self.channel = channel
 
-    def readRGB(self):
+    def read(self):
         bus.write_byte(MUX_ADDR, 1<<self.channel)
         data = self.colourSensor.readRGB() # Read the sensor (Colour space: Red Green Blue)
         return data
