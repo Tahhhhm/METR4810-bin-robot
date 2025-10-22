@@ -1,0 +1,25 @@
+from Colour_sensor import ColourSensor
+from Test import dispose
+from PiicoDev_Unified import sleep_ms
+
+# Create the colour sensor instance
+sensor = ColourSensor(channel=0)
+
+# Threshold for green detection
+GREEN_THRESHOLD = 255  # You can tweak to 240–250 for safety
+
+print("System running — waiting for green detection...")
+
+while True:
+    green_value = sensor.readGreen(samples=5)
+    print(f"Green: {green_value}")
+
+    if green_value >= GREEN_THRESHOLD:
+        print("Green detected! Activating disposal sequence...")
+        dispose()
+        # optional: wait a bit before checking again
+        sleep_ms(2000)
+    else:
+        print("No green detected.")
+
+    sleep_ms(500)  # adjust frequency of checks

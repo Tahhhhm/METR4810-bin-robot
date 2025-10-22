@@ -1,6 +1,12 @@
 from PiicoDev_Unified import sleep_ms
 from PiicoDev_Servo import PiicoDev_Servo, PiicoDev_Servo_Driver
+import smbus2 as smbus
 
+MUX_ADDR = 0x70
+bus = smbus.SMBus(1)
+channel = 1
+
+bus.write_byte(MUX_ADDR, 1<<channel)
 # Initialize the servo controller
 controller = PiicoDev_Servo_Driver()
 
