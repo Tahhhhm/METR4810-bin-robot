@@ -15,8 +15,8 @@ next_road = None
 
 
 motor_assembly = MOTOR_CODE.Motor(17, 27, 22, 23, 24, 18)
-colour_sensor1 = Colour_sensor.ColourSensor(channel=1)
-colour_sensor2 = Colour_sensor.ColourSensor(channel=3)
+colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
+colour_sensor2 = Colour_sensor.ColourSensor(channel=1)
 #colour_sensor3 = Colour_sensor.ColourSensor(channel=3)
 #colour_sensor4 = Colour_sensor.ColourSensor(channel=4)
 #ultrasonic = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=23, echo_pin=24)
