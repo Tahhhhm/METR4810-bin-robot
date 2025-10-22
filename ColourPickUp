@@ -6,7 +6,7 @@ from PiicoDev_Unified import sleep_ms
 sensor = ColourSensor(channel=0)
 
 # Threshold for green detection
-GREEN_THRESHOLD = 255  # You can tweak to 240–250 for safety
+GREEN_THRESHOLD = 250  # You can tweak to 240–250 for safety
 
 print("System running — waiting for green detection...")
 
