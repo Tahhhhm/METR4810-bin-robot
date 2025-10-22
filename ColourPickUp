@@ -6,18 +6,18 @@ from PiicoDev_Unified import sleep_ms
 sensor = ColourSensor(channel=0)
 
 # Threshold for green detection
-GREEN_THRESHOLD = 180  # You can tweak to 240–250 for safety
+GREEN_THRESHOLD = 400 
 
 print("System running — waiting for green detection...")
 
 while True:
-    green_value = sensor.readGreen(samples=5)
+    rgb = sensor.readRGB()             # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
+    green_value = rgb['green']
     print(f"Green: {green_value}")
 
     if green_value >= GREEN_THRESHOLD:
         print("Green detected! Activating disposal sequence...")
-        dispose()
-        # optional: wait a bit before checking again
+        #dispose()
         sleep_ms(2000)
     else:
         print("No green detected.")
