@@ -13,9 +13,5 @@ class ColourSensor:
     def readRGB(self):
         bus.write_byte(MUX_ADDR, 1<<self.channel)
         data = self.colourSensor.readRGB() # Read the sensor (Colour space: Red Green Blue)
-        red = data['red'] # extract the RGB information from data
-        grn = data['green']
-        blu = data['blue']
-        print(str(blu) + " Blue  " + str(grn) + " Green  " + str(red) + " Red")
         return data
 
