@@ -18,10 +18,10 @@ axial = PiicoDev_Servo(controller, 3, midpoint_us=1450, range_us=1800)
 print("Starting autonomous servo motion...")
 
 def dispose():
-    arm.speed = -0.3
+    arm.speed = -0.5
     sleep_ms(1200)
     arm.speed = 0
-    sleep_ms(1000) 
+    sleep_ms(10000) 
 
 # axial.speed = 0.8
 # sleep_ms(1000)
