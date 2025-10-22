@@ -35,8 +35,8 @@ def color_sensor_listener():
     """
     global bin_aligned , bin_location, program_running
     while program_running:
-        rgbL = colour_sensor1.readRGB() # Left sensor
-        rgbR = colour_sensor2.readRGB() # Right sensor
+        rgbL = colour_sensor1.read() # Left sensor
+        rgbR = colour_sensor2.read() # Right sensor
         green_valueL = rgbL['green']
         green_valueR = rgbR['green']
         if green_valueL >= GREEN_THRESHOLD:
