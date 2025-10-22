@@ -1,4 +1,4 @@
-from Colour_sensor import ColourSensor
+from Colourtest import ColourSensor
 from Test import dispose
 from PiicoDev_Unified import sleep_ms
 
