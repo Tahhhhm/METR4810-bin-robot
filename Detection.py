@@ -23,7 +23,6 @@ class AI:
             print("No frame captured for bin detection")
             return []
 
-        detections = []
         bin_results = self.bin_detection_model(frame, imgsz=320, verbose=False)
 
         for box in bin_results[0].boxes:
@@ -38,30 +37,15 @@ class AI:
             # Decide if left or right
             side = "left" if center_x < self.middle_x else "right"
 
-            detection = BinDetection(label=bin_label, side=side, confidence=conf)
-            detections.append(detection)
+            detection = bin_label, side
 
-        return detections
+        return detection
 
 
     def detect_road(self):
         ret, frame = self.cap.read()
-        if not ret:
-            print("No frame captured for road detection")
-            return []
-
-        detections = []
-        road_results = self.road_detection_model(frame, imgsz=320, verbose=False)
-
-        for road in road_results[0].boxes:
-            cls = int(road.cls[0])
-            conf = float(road.conf[0])
-            road_label = self.road_detection_model.names[cls]
-
-            detection = RoadDetection(label=road_label, confidence=conf)
-            detections.append(detection)
-
-        return detections
+        road_result = self.road_detection_model(frame, imgsz=320, verbose=False)
+        return road_result
 
 
     def end_detection(self):

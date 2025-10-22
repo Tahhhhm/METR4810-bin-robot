@@ -12,6 +12,7 @@ bin_aligned = False
 off_road = False
 bin_location = None
 next_road = None
+tiles=["straight"]
 
 
 motor_assembly = MOTOR_CODE.Motor(17, 27, 22, 23, 24, 18)
@@ -39,6 +40,10 @@ def color_sensor_listener():
         rgbR = colour_sensor2.read() # Right sensor
         green_valueL = rgbL['green']
         green_valueR = rgbR['green']
+
+        next_tile = camera.detect_road()
+        motor_assembly.processTiles(next_tile, tiles)
+
         if green_valueL >= GREEN_THRESHOLD:
             bin_aligned = True
             bin_location = "left"
