@@ -4,46 +4,55 @@ import MOTOR_CODE
 import threading
 import time
 import Detection
+from PiicoDev_Unified import sleep_ms
+from SERVO_CODE import ServoController
 current_mode = "idle"
 switch_requested = False
 program_running = True
 GREEN_THRESHOLD = 400 
 bin_aligned = False
-off_road = False
+off_road_left = None
 bin_location = None
 next_road = None
-tiles=["straight"]
+distance = None
+ROAD_THRESHOLD = 250
 
 
 motor_assembly = MOTOR_CODE.Motor(17, 27, 22, 23, 24, 18)
 colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
 colour_sensor2 = Colour_sensor.ColourSensor(channel=1)
-#colour_sensor3 = Colour_sensor.ColourSensor(channel=3)
-#colour_sensor4 = Colour_sensor.ColourSensor(channel=4)
-#ultrasonic = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=23, echo_pin=24)
-camera= Detection.AI()
-
-def camera_listener():
-    camera= Detection.AI()
-
-    return
+colour_sensor3 = Colour_sensor.ColourSensor(channel=2)
+colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
+ultrasonic = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=23, echo_pin=24)
+camera=Detection.AI()
 
 
-def color_sensor_listener():
+def listener():
     """
     Continuously monitors the color sensors to detect bin alignment.
+    Continously monitors if the robot is off-road by ultrasonic
     Updates the global variable `bin_aligned` based on sensor readings.
     """
-    global bin_aligned , bin_location, program_running
+    global bin_aligned , bin_location, program_running, distance
     while program_running:
-        rgbL = colour_sensor1.read() # Left sensor
-        rgbR = colour_sensor2.read() # Right sensor
-        green_valueL = rgbL['green']
+        rgbL = colour_sensor1.readRGB() # Left sensor bins 
+        rgbR = colour_sensor2.readRGB() # Right sensor bins
+        roadL = colour_sensor3.readRGB() # Left Front robot sensor
+        roadR = colour_sensor4.readRGB() # Right Front robot sensor
+        distance = ultrasonic.obstacles_present() # Detects front obstacles
+        green_valueL = rgbL['green'] 
         green_valueR = rgbR['green']
-
-        next_tile = camera.detect_road()
-        motor_assembly.processTiles(next_tile, tiles)
-
+        
+        if roadL > ROAD_THRESHOLD:
+            off_road_left = True
+        else:
+            off_road_left = False
+        if roadR > ROAD_THRESHOLD:
+            off_road_right = True
+        else:
+            off_road_right = False    
+        if distance =
+        
         if green_valueL >= GREEN_THRESHOLD:
             bin_aligned = True
             bin_location = "left"
@@ -81,15 +90,31 @@ def idle_mode():
 
 def start_mode():
     print('starting...')
-    global bin_aligned
+    global bin_aligned next_road
     while not switch_requested and program_running:
-        if bin_aligned == False:
+        next_road=camera.detect_road()
+        if off_road_left == True:
+            motor_assembly.turn_right()
+        else:
             motor_assembly.forward()
+            sleep_ms(100)
+        if off_road_right == True:
+            motor_assembly.turn_left()
+        else:
+            motor_assembly.forward()
+            sleep_ms(100)
+        if bin_aligned == False:
+            if next_road== 'straight'
+            motor_assembly.forward()
+            sleep_ms(2000)
+            motor_assembly.forward()
+            #how to explode map, and avoid things 
         elif bin_aligned == True:
              motor_assembly.stop()
              if bin_location == "left":
                 print("Picking up bin on the left")
                 #servo pickup code for left bin
+                ServoController.pickup_left
              elif bin_location == "right":
                 print("Picking up bin on the right")
                 #servo pickup code for left bin
@@ -120,7 +145,8 @@ def main():
     # Start the input listener in a separate thread
     listener_thread = threading.Thread(target=input_listener, daemon=True)
     listener_thread.start()
-    colour_sensor_listener_thread = threading.Thread(target=color_sensor_listener, daemon=True)
+    
+    colour_sensor_listener_thread = threading.Thread(target=listener, daemon=True)
     colour_sensor_listener_thread.start()
 
 
