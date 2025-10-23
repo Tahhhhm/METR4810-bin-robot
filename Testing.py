@@ -36,7 +36,7 @@ def sensor_listener():
     Continously monitors if the robot is off-road by ultrasonic
     Updates the global variable `bin_aligned` based on sensor readings.
     """
-    global bin_aligned , bin_location, program_running, distance
+    global bin_aligned , bin_location, program_running, distance, off_road_right, off_road_left, Tile_end, obstacle
     while program_running:
         rgbL = colour_sensor1.readRGB() # Left sensor bins 
         rgbR = colour_sensor2.readRGB() # Right sensor bins
@@ -56,7 +56,7 @@ def sensor_listener():
         else:
             off_road_right = False   
             
-        if roadL > ENDING & roadR > ENDING:
+        if roadL > ENDING and roadR > ENDING:
             Tile_end = True
             
         if distance <= 8:
@@ -101,9 +101,9 @@ def idle_mode():
 
 def start_mode():
     print('starting...')
-    global bin_aligned; next_road
+    global bin_aligned, next_road
     while not switch_requested and program_running:
-        next_road=camera.detect_road()
+        
         if off_road_left == True:
             motor_assembly.turn_right()
             if timer.is_alive==True:
@@ -157,7 +157,7 @@ def start_mode():
         if Tile_end == True:
             timer.cancel()
             motor_assembly.stop()
-            
+            sleep_ms(500)
             #how to explode map, and avoid things 
         if bin_aligned == True:
             timer.cancel()
@@ -169,6 +169,7 @@ def start_mode():
             elif bin_location == "right":
                 print("Picking up bin on the right")
                 #servo pickup code for left bin
+    next_road=camera.detect_road()
 
 def return_mode():
     print("returning...")
@@ -197,8 +198,8 @@ def main():
     listener_thread = threading.Thread(target=input_listener, daemon=True)
     listener_thread.start()
     
-    colour_sensor_listener_thread = threading.Thread(target=listener, daemon=True)
-    colour_sensor_listener_thread.start()
+    sensor_listener_thread = threading.Thread(target=sensor_listener, daemon=True)
+    sensor_listener_thread.start()
 
 
     global switch_requested
