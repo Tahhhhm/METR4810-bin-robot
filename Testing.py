@@ -59,7 +59,7 @@ def sensor_listener():
         if roadL > ENDING & roadR > ENDING:
             Tile_end = True
             
-        if distance <= 3:
+        if distance <= 8:
             obstacle = True
         else:
             obstacle = False   
@@ -103,37 +103,80 @@ def start_mode():
     print('starting...')
     global bin_aligned; next_road
     while not switch_requested and program_running:
-        next_road=camera.detect_road()
-        if off_road_left == True:
+        #Check left front and aligns itself
+        if off_road_left == True :
             motor_assembly.turn_right()
-        else:
-            motor_assembly.forward()
-            sleep_ms(100)
-        if off_road_right == True:
-            motor_assembly.turn_left()
-        else:
-            motor_assembly.forward()
-            sleep_ms(100)
-        if obstacle == True:
-            motor_assembly.turn_left()
-            sleep_ms(200)
-            motor_assembly.turn_right()
-            sleep_ms(600)
-
-        motor_assembly.processTiles(next_road)
-        if Tile_end == True:
+            if timer.is_alive==True:
+             pass
+            elif timer.is_alive == False:
+                timer=threading.Timer(10,motor_assembly.stop)
+                timer.start()
+                  
+        elif off_road_left == False :
+            timer.cancel()
             motor_assembly.stop()
+            motor_assembly.forward()
+         
+        #Check right front and aligns itself  
+        if off_road_right == True:
+            motor_assembly.turn_right()
+            if timer.is_alive==True:
+             pass
+            elif timer.is_alive == False:
+                timer=threading.Timer(10,motor_assembly.stop)
+                timer.start()
+        
+        elif off_road_right == False:
+            timer.cancel()
+            motor_assembly.stop()
+            motor_assembly.forward()
+        
+        if obstacle == True:
+            timer.cancel
+            motor_assembly.turn_left()
+            if timer.is_alive==True:
+             pass
+         # turns left for 0.2 s to check for obstacles if obstacles flag is still true it means obstacle
+         # are on the left
+            elif timer.is_alive == False:
+                timer=threading.Timer(0.2,motor_assembly.stop)
+                timer.start()
+            motor_assembly.turn_right()
+            if timer.is_alive==True:
+             pass
+            elif timer.is_alive == False:
+                timer=threading.Timer(10,motor_assembly.stop)
+                timer.start()
+        elif obstacle == False:
+            timer.cancel
+            motor_assembly.stop()
+            motor_assembly.forward()
             
-            #how to explode map, and avoid things 
+
+        
+        if Tile_end == True:
+            timer.cancel()
+            motor_assembly.stop()
+            sleep_ms(500)
+            motor_assembly.forward()
+            sleep_ms(500)
+            pass
+            # white paper markers on each side near the end of the road, its assume that the robot is 
+            # somewhat aligned straight and just before the next tile
+             
         if bin_aligned == True:
-             motor_assembly.stop()
-             if bin_location == "left":
+            timer.cancel()
+            motor_assembly.stop()
+            if bin_location == "left":
                 print("Picking up bin on the left")
                 #servo pickup code for left bin
                 ServoController.pickup_left
-             elif bin_location == "right":
+            elif bin_location == "right":
                 print("Picking up bin on the right")
                 #servo pickup code for left bin
+        
+        next_road=camera.detect_road()        
+        motor_assembly.processTiles(next_road)
 
 def return_mode():
     print("returning...")

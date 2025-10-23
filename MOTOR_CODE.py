@@ -58,7 +58,7 @@ class Motor:
         GPIO.output(self.in4, GPIO.HIGH)
         GPIO.output(self.EnB, GPIO.HIGH)
         
-
+    
     def stop(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.LOW)
@@ -71,9 +71,13 @@ class Motor:
         tile = tile_list[0]
         if tile == "straight":
             self.forward()
-            sleep(2)
+            sleep(5.5)
             self.stop()
         elif tile == "Right_turn":
+            self.forward()
+            sleep(2)
+            self.turn_right()
+            sleep(1)
             self.forward()
             sleep(1)
             self.turn_right()
@@ -82,6 +86,10 @@ class Motor:
             sleep(1)
             self.stop()
         elif tile == "left_turn":
+            self.forward()
+            sleep(2)
+            self.turn_left()
+            sleep(1)
             self.forward()
             sleep(1)
             self.turn_left()
@@ -94,23 +102,23 @@ class Motor:
             
             if choice == "forward":
                 self.forward()
-                sleep(2)
+                sleep(5.5)
                 self.stop()
             elif choice == "right":
                 self.forward()
-                sleep(1)
-                self.turn_left()
-                sleep(2)
-                self.forward()
-                sleep(1)
-                self.stop()
-            elif choice == "left":
-                self.forward()
-                sleep(1)
+                sleep(2.8)
                 self.turn_right()
                 sleep(2)
                 self.forward()
-                sleep(1)
+                sleep(1.5)
+                self.stop()
+            elif choice == "left":
+                self.forward()
+                sleep()
+                self.turn_left()
+                sleep(2)
+                self.forward()
+                sleep(1.5)
                 self.stop()
 
  
