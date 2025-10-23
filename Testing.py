@@ -103,8 +103,8 @@ def start_mode():
     print('starting...')
     global bin_aligned; next_road
     while not switch_requested and program_running:
-        #Check left front and aligns itself
-        if off_road_left == True :
+        next_road=camera.detect_road()
+        if off_road_left == True:
             motor_assembly.turn_right()
             if timer.is_alive==True:
              pass
@@ -157,13 +157,8 @@ def start_mode():
         if Tile_end == True:
             timer.cancel()
             motor_assembly.stop()
-            sleep_ms(500)
-            motor_assembly.forward()
-            sleep_ms(500)
-            pass
-            # white paper markers on each side near the end of the road, its assume that the robot is 
-            # somewhat aligned straight and just before the next tile
-             
+            
+            #how to explode map, and avoid things 
         if bin_aligned == True:
             timer.cancel()
             motor_assembly.stop()
@@ -174,9 +169,6 @@ def start_mode():
             elif bin_location == "right":
                 print("Picking up bin on the right")
                 #servo pickup code for left bin
-        
-        next_road=camera.detect_road()        
-        motor_assembly.processTiles(next_road)
 
 def return_mode():
     print("returning...")
