@@ -103,7 +103,8 @@ def start_mode():
     print('starting...')
     global bin_aligned; next_road
     while not switch_requested and program_running:
-        next_road=camera.detect_road()
+        next_road=camera.detect_road() 
+        #detect if gone off track 
         if off_road_left == True:
             motor_assembly.turn_right()
         else:
@@ -124,7 +125,7 @@ def start_mode():
         if Tile_end == True:
             motor_assembly.stop()
             
-            #how to explode map, and avoid things 
+            #how to explode map and avoid things 
         if bin_aligned == True:
              motor_assembly.stop()
              if bin_location == "left":
@@ -134,6 +135,12 @@ def start_mode():
              elif bin_location == "right":
                 print("Picking up bin on the right")
                 #servo pickup code for left bin
+        if bin_aligned == False and obstacle == False: 
+            print("continue along road")
+            motor_assembly.forward()
+        
+
+
 
 def return_mode():
     print("returning...")
