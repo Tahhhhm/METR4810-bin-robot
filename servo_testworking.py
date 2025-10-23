@@ -34,8 +34,10 @@ micro_1.when_released = on_release
 # servo3 = PiicoDev_Servo(controller, 3, degrees=180)
 servo4 = PiicoDev_Servo(controller, 4, midpoint_us=1500, range_us = 1800)
 
-servo4.speed = 0.1
-print("DUMP")                                                       
+servo4.speed = -0.1
+sleep_ms(3000)
+print("DUMP")
+servo4.speed = 0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 
 # Hit limit switch
 # servo4.speed = -0.5 
