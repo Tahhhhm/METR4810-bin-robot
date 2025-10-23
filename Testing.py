@@ -137,10 +137,11 @@ def start_mode():
             if timer.is_alive==True:
              pass
          # turns left for 0.2 s to check for obstacles if obstacles flag is still true it means obstacle
-         # are on the left
+         # are on the left then turns to the right for 10 seconds then cancels timer to move forward
             elif timer.is_alive == False:
                 timer=threading.Timer(0.2,motor_assembly.stop)
                 timer.start()
+                
             motor_assembly.turn_right()
             if timer.is_alive==True:
              pass
