@@ -76,7 +76,7 @@ def sensor_listener():
                 bin_location = None
 
             time.sleep(0.5)
-    except Exception as e:
+    except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Sensor listener crashed:", e)
         traceback.print_exc()
@@ -101,7 +101,7 @@ def input_listener():
                 program_running = False
                 switch_requested = True
                 print("Exiting program...")
-    except Exception as e:
+    except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Input listener crashed:", e)
         traceback.print_exc()
@@ -115,7 +115,7 @@ def idle_mode():
                 break
             motor_assembly.forward()
             # time.sleep(1)
-    except Exception as e:
+    except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Idle mode crashed:", e)
         traceback.print_exc()
@@ -190,7 +190,7 @@ def start_mode():
                 print("Nothing stopping me, going forward...")
                 motor_assembly.forward()
 
-    except Exception as e:
+    except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Start mode crashed:", e)
         traceback.print_exc()
@@ -204,7 +204,7 @@ def return_mode():
             motor_assembly.backward()
             time.sleep(1)
             motor_assembly.stop()
-    except Exception as e:
+    except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Return mode crashed:", e)
         traceback.print_exc()
@@ -217,7 +217,7 @@ def stop_mode():
                 break
             motor_assembly.stop()
             time.sleep(0.1)
-    except Exception as e:
+    except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Stop mode crashed:", e)
         traceback.print_exc()
@@ -247,7 +247,7 @@ def main():
             mode_function()
             print(f">>> Switching mode to '{current_mode}'...\n")
 
-    except Exception as e:
+    except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Main loop crashed:", e)
         traceback.print_exc()

@@ -39,40 +39,40 @@ class Motor:
         GPIO.output(self.in2, GPIO.LOW)
         GPIO.output(self.in3, GPIO.HIGH)
         GPIO.output(self.in4, GPIO.LOW)
-        print("[MOTOR] Moving forward")
+        #print("[MOTOR] Moving forward")
 
     def backward(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.HIGH)
-        print("[MOTOR] Moving backward")
+        #print("[MOTOR] Moving backward")
 
     def turn_left(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.HIGH)
         GPIO.output(self.in4, GPIO.LOW)
-        print("[MOTOR] Turning left")
+        #print("[MOTOR] Turning left")
 
     def turn_right(self):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.HIGH)
-        print("[MOTOR] Turning right")
+        #print("[MOTOR] Turning right")
 
     def stop(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.LOW)
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.LOW)
-        print("[MOTOR] Stopped")
+        #print("[MOTOR] Stopped")
 
     def cleanup(self):
         self.stop()
         GPIO.cleanup()
-        print("[MOTOR] GPIO cleaned up")
+        #print("[MOTOR] GPIO cleaned up")
 
     # ========== TURN BY ANGLE (approximate) ==========
     def turn(self, degree):
@@ -83,10 +83,10 @@ class Motor:
         """
         turn_time = abs(degree) / 90.0 * 0.5  # ~0.5s per 90°, calibrate this
         if degree > 0:
-            print(f"[MOTOR] Turning right {degree}°")
+            #print(f"[MOTOR] Turning right {degree}°")
             self.turn_right()
         elif degree < 0:
-            print(f"[MOTOR] Turning left {degree}°")
+            #print(f"[MOTOR] Turning left {degree}°")
             self.turn_left()
         else:
             return
@@ -102,7 +102,7 @@ class Motor:
         global tile_action_paused
 
         for tile in tile_list:
-            print(f"[PROCESS TILE] Executing tile: {tile}")
+            #print(f"[PROCESS TILE] Executing tile: {tile}")
 
             # Wait if paused
             while tile_action_paused:
@@ -143,7 +143,7 @@ class Motor:
             # --- Crossroad tile (random path for testing) ---
             elif tile == "crossroad":
                 choice = random.choice(["forward", "right", "left"])
-                print(f"[CROSSROAD] Randomly chosen direction: {choice}")
+                # print(f"[CROSSROAD] Randomly chosen direction: {choice}")
 
                 if choice == "forward":
                     self.forward()
@@ -167,4 +167,4 @@ class Motor:
             self.stop()
             sleep(0.5)
 
-        print("[PROCESS TILE] Tile sequence complete.")
+        # print("[PROCESS TILE] Tile sequence complete.")
