@@ -79,7 +79,7 @@ def sensor_listener():
     except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Sensor listener crashed:", e)
-        traceback.print_exc()
+        return
 
 # ---------------------- Input listener ----------------------
 def input_listener():
@@ -104,7 +104,7 @@ def input_listener():
     except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Input listener crashed:", e)
-        traceback.print_exc()
+        return
 
 # ---------------------- Robot modes ----------------------
 def idle_mode():
@@ -118,7 +118,7 @@ def idle_mode():
     except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Idle mode crashed:", e)
-        traceback.print_exc()
+        return
 
 def start_mode():
     global bin_aligned, next_road, tile_action_paused
@@ -193,8 +193,7 @@ def start_mode():
     except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Start mode crashed:", e)
-        traceback.print_exc()
-
+        return
 def return_mode():
     try:
         print("[RETURN MODE] Running...")
@@ -207,7 +206,6 @@ def return_mode():
     except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Return mode crashed:", e)
-        traceback.print_exc()
 
 def stop_mode():
     try:
@@ -220,7 +218,7 @@ def stop_mode():
     except (Exception, KeyboardInterrupt) as e:
         motor_assembly.stop()
         print("[ERROR] Stop mode crashed:", e)
-        traceback.print_exc()
+        return
 
 # ---------------------- Main ----------------------
 def main():
