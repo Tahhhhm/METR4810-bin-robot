@@ -13,9 +13,9 @@ current_mode = "idle"
 switch_requested = False
 program_running = True
 
-GREEN_THRESHOLD = 400
-ROAD_THRESHOLD = 250
-ENDING = 10000
+BIN_THRESHOLD = 400
+ROAD_THRESHOLD = 240
+#ENDING = 10000
 
 bin_aligned = False
 off_road_left = False
@@ -26,7 +26,7 @@ tile_list = ["straight"]  # First action is always a straight line
 tile_action_paused = False
 distance = None
 obstacle = False
-Tile_end = False
+#Tile_end = False
 
 # ---------------------- Hardware setup ----------------------
 motor_assembly = MOTOR_CODE.Motor(17, 27, 22, 23, 24, 18)
@@ -39,7 +39,7 @@ camera = Detection.AI()
 
 # ---------------------- Sensor listener ----------------------
 def sensor_listener():
-    global bin_aligned, bin_location, distance, off_road_left, off_road_right, Tile_end, obstacle
+    global bin_aligned, bin_location, distance, off_road_left, off_road_right, obstacle
     try:
         while True:
             if not program_running:
@@ -48,27 +48,27 @@ def sensor_listener():
             # Read color sensors
             left_bin_csensor = colour_sensor1.readRGB()['green']
             right_bin_csensor = colour_sensor2.readRGB()['green']
-            left_road_csensor = colour_sensor3.readRGB()['green']
-            right_road_csensor = colour_sensor4.readRGB()['green']
+            left_road_csensor = colour_sensor3.readRGB()
+            right_road_csensor = colour_sensor4.readRGB()
 
             # Read ultrasonic distance
             distance = ultrasonic.obstacle_distance()
 
             # Off-road detection
-            off_road_left = left_road_csensor > ROAD_THRESHOLD
-            off_road_right = right_road_csensor > ROAD_THRESHOLD
+            off_road_left = all(rgb_value < ROAD_THRESHOLD for rgb_value in left_road_csensor.values())
+            off_road_right = all(rgb_value < ROAD_THRESHOLD for rgb_value in right_road_csensor.values())
 
             # Tile end detection
-            Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
+            # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
 
             # Obstacle detection
             obstacle = distance <= 8
 
             # Bin alignment
-            if left_bin_csensor >= GREEN_THRESHOLD:
+            if left_bin_csensor >= BIN_THRESHOLD:
                 bin_aligned = True
                 bin_location = "left"
-            elif right_bin_csensor >= GREEN_THRESHOLD:
+            elif right_bin_csensor >= BIN_THRESHOLD:
                 bin_aligned = True
                 bin_location = "right"
             else:
@@ -125,109 +125,67 @@ def start_mode():
         print("[START MODE] Running...")
 
         # Start tile execution thread
-        tile_thread = threading.Thread(target=motor_assembly.processTiles, args=(tile_list,), daemon=True)
-        tile_thread.start()
+        #tile_thread = threading.Thread(target=motor_assembly.processTiles, args=(tile_list,), daemon=True)
+        #tile_thread.start()
 
         while True:
             if switch_requested or not program_running:
                 break
-
+            
             # --- 1. Obstacle avoidance ---
             if obstacle:
-                tile_action_paused = True
-                print("[AVOIDANCE] Obstacle detected! Backing up...")
-                motor_assembly.stop()
-                time.sleep(0.2)
-
-                motor_assembly.backward()
-                time.sleep(1.0)
-                motor_assembly.stop()
-                time.sleep(0.2)
-
-                print("[AVOIDANCE] Turning to avoid obstacle...")
-                distance_log = []
-                CLEAR_THRESHOLD = 20
-                HISTORY_SIZE = 5
-                TURN_TIMEOUT = 5.0
-                TURN_DIRECTION = "left"
-
-                if TURN_DIRECTION == "left":
-                    motor_assembly.turn_left()
-                    opposite_sensor = lambda: off_road_right
-                else:
-                    motor_assembly.turn_right()
-                    opposite_sensor = lambda: off_road_left
-
-                turn_start = time.time()
-                while (time.time() - turn_start) < TURN_TIMEOUT:
-                    d = ultrasonic.obstacle_distance()
-                    distance_log.append(d)
-                    if len(distance_log) > HISTORY_SIZE:
-                        distance_log.pop(0)
-
-                    if len(distance_log) == HISTORY_SIZE and all(x >= CLEAR_THRESHOLD or x == float('inf') for x in distance_log):
-                        print("[AVOIDANCE] Path appears clear.")
-                        break
-
-                    if opposite_sensor():
-                        print("[AVOIDANCE] Off-road detected — stopping turn.")
-                        break
-
-                    time.sleep(0.1)
-
-                motor_assembly.stop()
-                time.sleep(0.2)
-                print("[AVOIDANCE] Resuming tile sequence.")
-                tile_action_paused = False
+                #tile_action_paused = True
+                print("[AVOIDANCE] Obstacle detected! [Obstacle Avoidance pending implementation]")
+                #motor_assembly.stop()
+                #time.sleep(1)
+                #motor_assembly.turn_right()
                 continue
 
             # --- 2. Off-road recovery ---
             elif off_road_left:
-                tile_action_paused = True
+                #tile_action_paused = True
                 print("[CORRECTION] Off-road (left). Turning right...")
                 motor_assembly.turn_right()
-                time.sleep(0.5)
-                motor_assembly.stop()
-                tile_action_paused = False
+                #tile_action_paused = False
 
             elif off_road_right:
                 tile_action_paused = True
                 print("[CORRECTION] Off-road (right). Turning left...")
                 motor_assembly.turn_left()
-                time.sleep(0.5)
-                motor_assembly.stop()
-                tile_action_paused = False
+                #tile_action_paused = False
 
             # --- 3. Bin handling ---
             elif bin_aligned:
                 tile_action_paused = True
                 motor_assembly.stop()
-                time.sleep(0.5)
+                # time.sleep(0.5)
                 if bin_location == "left":
-                    print("[BIN] Picking up bin on the left")
+                    print("[BIN] Picking up bin on the left [awaiting implementation!]")
                     ServoController.pickup_left()
                 elif bin_location == "right":
-                    print("[BIN] Picking up bin on the right")
+                    print("[BIN] Picking up bin on the right [awaiting implementation!]")
                     ServoController.pickup_right()
-                motor_assembly.stop()
-                time.sleep(0.5)
+                # motor_assembly.stop()
+                # time.sleep(0.5)
 
                 bin_aligned = False
                 tile_action_paused = False
 
             # --- 4. Tile end handling ---
-            elif Tile_end:
-                tile_action_paused = True
-                motor_assembly.stop()
-                sleep_ms(500)
+            # elif Tile_end:
+            #     tile_action_paused = True
+            #     motor_assembly.stop()
+            #     sleep_ms(500)
 
-                next_tile = camera.detect_road()
-                tile_list.append(next_tile)
-                Tile_end = False
-                print(f"[TILE] Detected next tile: {next_tile}")
-                tile_action_paused = False
+            #     next_tile = camera.detect_road()
+            #     tile_list.append(next_tile)
+            #     Tile_end = False
+            #     print(f"[TILE] Detected next tile: {next_tile}")
+            #     tile_action_paused = False
 
-            time.sleep(0.1)
+            # time.sleep(0.1)
+            else:
+                motor_assembly.forward()
 
     except Exception as e:
         motor_assembly.stop()
