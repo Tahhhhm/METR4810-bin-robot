@@ -14,10 +14,10 @@ GREEN_THRESHOLD = 400
 print("System running — waiting for green detection...")
 
 while True:
-    print(sensor1.readRGB)
-    print(sensor2.readRGB)
-    print(sensor3.readRGB)
-    print(sensor4.readRGB)
+    print(sensor1.readRGB())
+    print(sensor2.readRGB())
+    print(sensor3.readRGB())
+    print(sensor4.readRGB())
     sleep_ms(1000)
     
     #            # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
