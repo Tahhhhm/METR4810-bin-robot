@@ -30,7 +30,7 @@ obstacle = False
 
 # ---------------------- Hardware setup ----------------------
 motor_assembly = MOTOR_CODE.Motor(20, 16, 26, 19, 21, 13)
-colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
+#colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
 colour_sensor2 = Colour_sensor.ColourSensor(channel=1)
 colour_sensor3 = Colour_sensor.ColourSensor(channel=2)
 colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
@@ -46,7 +46,7 @@ def sensor_listener():
             break
 
         # Read color sensors
-        left_bin_csensor = colour_sensor1.readRGB()['green']
+        #left_bin_csensor = colour_sensor1.readRGB()['green']
         right_bin_csensor = colour_sensor3.readRGB()['green']
         left_road_csensor = colour_sensor2.readRGB()
         right_road_csensor = colour_sensor4.readRGB()
