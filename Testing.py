@@ -65,10 +65,10 @@ def sensor_listener():
         # obstacle = distance <= 8
 
         # Bin alignment
-        if left_bin_csensor >= BIN_THRESHOLD:
-            bin_aligned = True
-            bin_location = "left"
-        elif right_bin_csensor >= BIN_THRESHOLD:
+        #if left_bin_csensor >= BIN_THRESHOLD:
+        #    bin_aligned = True
+        #    bin_location = "left"
+        if right_bin_csensor >= BIN_THRESHOLD:
             bin_aligned = True
             bin_location = "right"
         else:
