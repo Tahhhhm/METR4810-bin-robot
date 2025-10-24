@@ -3,7 +3,7 @@ from Colour_sensor import ColourSensor
 from PiicoDev_Unified import sleep_ms
 
 # Create the colour sensor instance
-sensor1 = ColourSensor(channel=0)
+sensor1 = ColourSensor(channel=4)
 sensor2 = ColourSensor(channel=1)
 sensor3 = ColourSensor(channel=2)
 sensor4 = ColourSensor(channel=3)
