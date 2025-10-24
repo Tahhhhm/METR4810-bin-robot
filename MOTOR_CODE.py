@@ -2,222 +2,169 @@ import RPi.GPIO as GPIO
 from time import sleep
 import random
 
+# Global flag (set externally in main control file)
+tile_action_paused = False  
 
-
-# Initialize motors (adjust GPIO pins accordingly)
 
 class Motor:
-    def __init__(self, in1, in2, in3, in4, EnA, EnB):
+    def __init__(self, in1, in2, in3, in4, EnA=None, EnB=None):
         self.in1 = in1
         self.in2 = in2
         self.in3 = in3
         self.in4 = in4
         self.EnA = EnA
         self.EnB = EnB
+
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(in1, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(in2, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(in3, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(in3, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(in4, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(EnA, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(EnB, GPIO.OUT, initial=GPIO.LOW)
- 
+        GPIO.setwarnings(False)
+
+        # Setup all motor pins as outputs
+        for pin in [in1, in2, in3, in4]:
+            GPIO.setup(pin, GPIO.OUT, initial=GPIO.LOW)
+
+        # Optional: if EnA/EnB provided, set them HIGH (always enabled)
+        if EnA is not None:
+            GPIO.setup(EnA, GPIO.OUT)
+            GPIO.output(EnA, GPIO.HIGH)
+        if EnB is not None:
+            GPIO.setup(EnB, GPIO.OUT)
+            GPIO.output(EnB, GPIO.HIGH)
+
+        print("[MOTOR] Initialized GPIO pins.")
+
+    # ========== BASIC MOVEMENTS ==========
+
     def forward(self):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)
-        GPIO.output(self.EnA, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.HIGH)
         GPIO.output(self.in4, GPIO.LOW)
-        GPIO.output(self.EnB, GPIO.HIGH)
-
+        print("[MOTOR] Moving forward")
 
     def backward(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.HIGH)
-        GPIO.output(self.EnA, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.HIGH)
-        GPIO.output(self.EnB, GPIO.HIGH)
-
+        print("[MOTOR] Moving backward")
 
     def turn_left(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.HIGH)
-        GPIO.output(self.EnA, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.HIGH)
         GPIO.output(self.in4, GPIO.LOW)
-        GPIO.output(self.EnB, GPIO.HIGH)
-
+        print("[MOTOR] Turning left")
 
     def turn_right(self):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)
-        GPIO.output(self.EnA, GPIO.HIGH)
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.HIGH)
-        GPIO.output(self.EnB, GPIO.HIGH)
-        
-    
+        print("[MOTOR] Turning right")
+
     def stop(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.LOW)
-        GPIO.output(self.EnA, GPIO.LOW)
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.LOW)
-        GPIO.output(self.EnB, GPIO.LOW)
-        
+        print("[MOTOR] Stopped")
+
+    def cleanup(self):
+        self.stop()
+        GPIO.cleanup()
+        print("[MOTOR] GPIO cleaned up")
+
+    # ========== TURN BY ANGLE (approximate) ==========
+    def turn(self, degree):
+        """
+        Turn the robot by an approximate degree.
+        Positive = Clockwise (right)
+        Negative = Counter-clockwise (left)
+        """
+        turn_time = abs(degree) / 90.0 * 0.5  # ~0.5s per 90°, calibrate this
+        if degree > 0:
+            print(f"[MOTOR] Turning right {degree}°")
+            self.turn_right()
+        elif degree < 0:
+            print(f"[MOTOR] Turning left {degree}°")
+            self.turn_left()
+        else:
+            return
+        sleep(turn_time)
+        self.stop()
+
+    # ========== TILE SEQUENCE EXECUTION ==========
     def processTiles(self, tile_list):
-        tile = tile_list[0]
-        if tile == "straight":
-            self.forward()
-            sleep(5.5)
-            self.stop()
-        elif tile == "Right_turn":
-            self.forward()
-            sleep(2)
-            self.turn_right()
-            sleep(1)
-            self.forward()
-            sleep(1)
-            self.turn_right()
-            sleep(1)
-            self.forward()
-            sleep(1)
-            self.stop()
-        elif tile == "left_turn":
-            self.forward()
-            sleep(2)
-            self.turn_left()
-            sleep(1)
-            self.forward()
-            sleep(1)
-            self.turn_left()
-            sleep(1)
-            self.forward()
-            sleep(1)
-            self.stop()
-        elif tile == "crossroad":
-            choice = random.choice(["forward", "right", "left"])
-            
-            if choice == "forward":
+        """
+        Executes a pre-defined motor sequence for each tile type.
+        Will pause automatically if tile_action_paused is True.
+        """
+        global tile_action_paused
+
+        for tile in tile_list:
+            print(f"[PROCESS TILE] Executing tile: {tile}")
+
+            # Wait if paused
+            while tile_action_paused:
+                self.stop()
+                sleep(0.1)
+
+            # --- Straight path ---
+            if tile == "straight":
                 self.forward()
                 sleep(5.5)
-                self.stop()
-            elif choice == "right":
+
+            # --- Right turn tile ---
+            elif tile == "Right_turn":
                 self.forward()
-                sleep(2.8)
+                sleep(2)
                 self.turn_right()
+                sleep(1)
+                self.forward()
+                sleep(1)
+                self.turn_right()
+                sleep(1)
+                self.forward()
+                sleep(1)
+
+            # --- Left turn tile ---
+            elif tile == "left_turn":
+                self.forward()
                 sleep(2)
-                self.forward()
-                sleep(1.5)
-                self.stop()
-            elif choice == "left":
-                self.forward()
-                sleep()
                 self.turn_left()
-                sleep(2)
+                sleep(1)
                 self.forward()
-                sleep(1.5)
-                self.stop()
+                sleep(1)
+                self.turn_left()
+                sleep(1)
+                self.forward()
+                sleep(1)
 
- 
-            
-    
-    """
-    def turn(degree, speed=1.0):
-        
-        Turns the robot by a specified degree.
-        Positive = Clockwise (right turn)
-        Negative = Counter-clockwise (left turn)
-        
-        # Simple estimation: 90 degrees ≈ 0.5 seconds (need to calibrate this)
-        turn_time = abs(degree) / 90.0 * 0.5  # adjust 0.5 based on real-world testing
+            # --- Crossroad tile (random path for testing) ---
+            elif tile == "crossroad":
+                choice = random.choice(["forward", "right", "left"])
+                print(f"[CROSSROAD] Randomly chosen direction: {choice}")
 
-        if degree > 0:
-            # Clockwise: left forward, right backward
-            motor_left.forward(speed)
-            motor_right.backward(speed) # REPLACE VALUE ON TESTING
-        elif degree < 0:
-            # Anticlockwise: left backward, right forward
-            motor_left.backward(speed)
-            motor_right.forward(speed)  # REPLACE VALUE ON TESTING
-        else:
-            return  # No turning
+                if choice == "forward":
+                    self.forward()
+                    sleep(5.5)
+                elif choice == "right":
+                    self.forward()
+                    sleep(2.8)
+                    self.turn_right()
+                    sleep(2)
+                    self.forward()
+                    sleep(1.5)
+                elif choice == "left":
+                    self.forward()
+                    sleep(2.8)
+                    self.turn_left()
+                    sleep(2)
+                    self.forward()
+                    sleep(1.5)
 
-        sleep(turn_time)
-        stop()
+            # After every tile motion
+            self.stop()
+            sleep(0.5)
 
-
-
-
-# --- Motion Macros (based on your Arduino logic) ---
-
-def straight():
-    fwd()
-    sleep(5.5)
-
-def hairpin(dir):
-    if dir == "right":
-        fwd()
-        sleep(2)
-        stop()
-        turn(-90)
-        fwd()
-        sleep(1)
-    else:
-        fwd()
-        sleep(2)
-        stop()
-        turn(90)
-        fwd()
-        sleep(1)
-
-def curve(dir):
-    if dir == "left":
-        fwd()
-        sleep(2)
-        stop()
-        turn(75)
-        fwd()
-        sleep(0.5)
-    else:
-        fwd()
-        sleep(2)
-        stop()
-        turn(-75)
-        fwd()
-        # Duration for final movement after turn not specified, assuming 0.5
-        sleep(0.5)
-
-def crossroad(dir):
-    fwd()
-    sleep(2)
-    if dir == "fwd":
-        fwd()
-        sleep(1)
-    elif dir == "left":
-        turn(45)
-        fwd()
-        sleep(1.5)
-    elif dir == "right":
-        turn(-45)
-        fwd()
-        sleep(1.5)
-    else:
-        fwd()
-        sleep(5)
-
-def delivery_point():
-    fwd()
-    sleep(1.5)
-
-# Main loop simulation
-if __name__ == '__main__':
-    fwd(speed=0.8)
-    bwd(speed=0.8)
-    turn(degree=90, speed=0.8)
-    turn(degree=-90, speed=0.8)
-
-    stop()
-"""
+        print("[PROCESS TILE] Tile sequence complete.")
