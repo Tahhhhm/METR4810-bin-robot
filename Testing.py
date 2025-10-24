@@ -29,7 +29,7 @@ obstacle = False
 #Tile_end = False
 
 # ---------------------- Hardware setup ----------------------
-motor_assembly = MOTOR_CODE.Motor(17, 27, 22, 23, 24, 18)
+motor_assembly = MOTOR_CODE.Motor(20, 16, 26, 19, 21, 13)
 colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
 colour_sensor2 = Colour_sensor.ColourSensor(channel=1)
 colour_sensor3 = Colour_sensor.ColourSensor(channel=2)
