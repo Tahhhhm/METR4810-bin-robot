@@ -62,7 +62,7 @@ def sensor_listener():
             # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
 
             # Obstacle detection
-            obstacle = distance <= 8
+            # obstacle = distance <= 8
 
             # Bin alignment
             if left_bin_csensor >= BIN_THRESHOLD:
@@ -113,7 +113,8 @@ def idle_mode():
         while True:
             if switch_requested or not program_running:
                 break
-            time.sleep(1)
+            motor_assembly.forward()
+            # time.sleep(1)
     except Exception as e:
         motor_assembly.stop()
         print("[ERROR] Idle mode crashed:", e)
