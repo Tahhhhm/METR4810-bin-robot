@@ -34,8 +34,8 @@ colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
 colour_sensor2 = Colour_sensor.ColourSensor(channel=1)
 colour_sensor3 = Colour_sensor.ColourSensor(channel=2)
 colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
-ultrasonic = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=5, echo_pin=6)
-camera = Detection.AI()
+# ultrasonic = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=5, echo_pin=6)
+# camera = Detection.AI()
 
 # ---------------------- Sensor listener ----------------------
 def sensor_listener():
@@ -47,12 +47,12 @@ def sensor_listener():
 
             # Read color sensors
             left_bin_csensor = colour_sensor1.readRGB()['green']
-            right_bin_csensor = colour_sensor2.readRGB()['green']
-            left_road_csensor = colour_sensor3.readRGB()
+            right_bin_csensor = colour_sensor3.readRGB()['green']
+            left_road_csensor = colour_sensor2.readRGB()
             right_road_csensor = colour_sensor4.readRGB()
 
             # Read ultrasonic distance
-            distance = ultrasonic.obstacle_distance()
+            #distance = ultrasonic.obstacle_distance()
 
             # Off-road detection
             off_road_left = all(rgb_value < ROAD_THRESHOLD for rgb_value in left_road_csensor.values())
@@ -156,6 +156,7 @@ def start_mode():
 
             # --- 3. Bin handling ---
             elif bin_aligned:
+                print("Bin ready in position")
                 tile_action_paused = True
                 motor_assembly.stop()
                 # time.sleep(0.5)
@@ -185,6 +186,7 @@ def start_mode():
 
             # time.sleep(0.1)
             else:
+                print("Nothing stopping me, going forward...")
                 motor_assembly.forward()
 
     except Exception as e:
