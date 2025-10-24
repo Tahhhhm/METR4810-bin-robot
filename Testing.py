@@ -40,185 +40,157 @@ colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
 # ---------------------- Sensor listener ----------------------
 def sensor_listener():
     global bin_aligned, bin_location, distance, off_road_left, off_road_right, obstacle
-    try:
-        while True:
-            if not program_running:
-                break
 
-            # Read color sensors
-            left_bin_csensor = colour_sensor1.readRGB()['green']
-            right_bin_csensor = colour_sensor3.readRGB()['green']
-            left_road_csensor = colour_sensor2.readRGB()
-            right_road_csensor = colour_sensor4.readRGB()
+    while True:
+        if not program_running:
+            break
 
-            # Read ultrasonic distance
-            #distance = ultrasonic.obstacle_distance()
+        # Read color sensors
+        left_bin_csensor = colour_sensor1.readRGB()['green']
+        right_bin_csensor = colour_sensor3.readRGB()['green']
+        left_road_csensor = colour_sensor2.readRGB()
+        right_road_csensor = colour_sensor4.readRGB()
 
-            # Off-road detection
-            off_road_left = all(rgb_value < ROAD_THRESHOLD for rgb_value in left_road_csensor.values())
-            off_road_right = all(rgb_value < ROAD_THRESHOLD for rgb_value in right_road_csensor.values())
+        # Read ultrasonic distance
+        #distance = ultrasonic.obstacle_distance()
 
-            # Tile end detection
-            # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
+        # Off-road detection
+        off_road_left = all(rgb_value < ROAD_THRESHOLD for rgb_value in left_road_csensor.values())
+        off_road_right = all(rgb_value < ROAD_THRESHOLD for rgb_value in right_road_csensor.values())
 
-            # Obstacle detection
-            # obstacle = distance <= 8
+        # Tile end detection
+        # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
 
-            # Bin alignment
-            if left_bin_csensor >= BIN_THRESHOLD:
-                bin_aligned = True
-                bin_location = "left"
-            elif right_bin_csensor >= BIN_THRESHOLD:
-                bin_aligned = True
-                bin_location = "right"
-            else:
-                bin_aligned = False
-                bin_location = None
+        # Obstacle detection
+        # obstacle = distance <= 8
 
-            time.sleep(0.5)
-    except (Exception) as e:
-        motor_assembly.stop()
-        print("[ERROR] Sensor listener crashed:", e)
-        return
+        # Bin alignment
+        if left_bin_csensor >= BIN_THRESHOLD:
+            bin_aligned = True
+            bin_location = "left"
+        elif right_bin_csensor >= BIN_THRESHOLD:
+            bin_aligned = True
+            bin_location = "right"
+        else:
+            bin_aligned = False
+            bin_location = None
+
+        time.sleep(0.5)
 
 # ---------------------- Input listener ----------------------
 def input_listener():
     global current_mode, switch_requested, program_running
-    try:
-        while True:
-            user_input = input("\n(Type 'switch <mode>' or 'exit'): ").strip().lower()
-            if not program_running:
-                break
+    while True:
+        user_input = input("\n(Type 'switch <mode>' or 'exit'): ").strip().lower()
+        if not program_running:
+            break
 
-            if user_input.startswith("switch"):
-                parts = user_input.split()
-                if len(parts) == 2:
-                    current_mode = parts[1]
-                    switch_requested = True
-                else:
-                    print("Usage: switch <mode>")
-            elif user_input == "exit":
-                program_running = False
+        if user_input.startswith("switch"):
+            parts = user_input.split()
+            if len(parts) == 2:
+                current_mode = parts[1]
                 switch_requested = True
-                print("Exiting program...")
-    except (Exception) as e:
-        motor_assembly.stop()
-        print("[ERROR] Input listener crashed:", e)
-        return
+            else:
+                print("Usage: switch <mode>")
+        elif user_input == "exit":
+            program_running = False
+            switch_requested = True
+            print("Exiting program...")
 
 # ---------------------- Robot modes ----------------------
 def idle_mode():
-    try:
-        print("[IDLE MODE] Running...")
-        while True:
-            if switch_requested or not program_running:
-                break
-            motor_assembly.forward()
-            # time.sleep(1)
-    except (Exception) as e:
-        motor_assembly.stop()
-        print("[ERROR] Idle mode crashed:", e)
-        return
+    print("[IDLE MODE] Running...")
+    while True:
+        if switch_requested or not program_running:
+            break
+        motor_assembly.forward()
+        # time.sleep(1)
 
 def start_mode():
     global bin_aligned, next_road, tile_action_paused
-    try:
-        print("[START MODE] Running...")
+    print("[START MODE] Running...")
 
-        # Start tile execution thread
-        #tile_thread = threading.Thread(target=motor_assembly.processTiles, args=(tile_list,), daemon=True)
-        #tile_thread.start()
+    # Start tile execution thread
+    #tile_thread = threading.Thread(target=motor_assembly.processTiles, args=(tile_list,), daemon=True)
+    #tile_thread.start()
 
-        while True:
-            if switch_requested or not program_running:
-                break
-            
-            # --- 1. Obstacle avoidance ---
-            if obstacle:
-                #tile_action_paused = True
-                print("[AVOIDANCE] Obstacle detected! [Obstacle Avoidance pending implementation]")
-                #motor_assembly.stop()
-                #time.sleep(1)
-                #motor_assembly.turn_right()
-                continue
+    while True:
+        if switch_requested or not program_running:
+            break
+        
+        # --- 1. Obstacle avoidance ---
+        if obstacle:
+            #tile_action_paused = True
+            print("[AVOIDANCE] Obstacle detected! [Obstacle Avoidance pending implementation]")
+            #motor_assembly.stop()
+            #time.sleep(1)
+            #motor_assembly.turn_right()
+            continue
 
-            # --- 2. Off-road recovery ---
-            elif off_road_left:
-                #tile_action_paused = True
-                print("[CORRECTION] Off-road (left). Turning right...")
-                motor_assembly.turn_right()
-                #tile_action_paused = False
+        # --- 2. Off-road recovery ---
+        elif off_road_left:
+            #tile_action_paused = True
+            print("[CORRECTION] Off-road (left). Turning right...")
+            motor_assembly.turn_right()
+            #tile_action_paused = False
 
-            elif off_road_right:
-                tile_action_paused = True
-                print("[CORRECTION] Off-road (right). Turning left...")
-                motor_assembly.turn_left()
-                #tile_action_paused = False
+        elif off_road_right:
+            tile_action_paused = True
+            print("[CORRECTION] Off-road (right). Turning left...")
+            motor_assembly.turn_left()
+            #tile_action_paused = False
 
-            # --- 3. Bin handling ---
-            elif bin_aligned:
-                print("Bin ready in position")
-                tile_action_paused = True
-                motor_assembly.stop()
-                # time.sleep(0.5)
-                if bin_location == "left":
-                    print("[BIN] Picking up bin on the left [awaiting implementation!]")
-                    ServoController.pickup_left()
-                elif bin_location == "right":
-                    print("[BIN] Picking up bin on the right [awaiting implementation!]")
-                    ServoController.pickup_right()
-                # motor_assembly.stop()
-                # time.sleep(0.5)
-
-                bin_aligned = False
-                tile_action_paused = False
-
-            # --- 4. Tile end handling ---
-            # elif Tile_end:
-            #     tile_action_paused = True
-            #     motor_assembly.stop()
-            #     sleep_ms(500)
-
-            #     next_tile = camera.detect_road()
-            #     tile_list.append(next_tile)
-            #     Tile_end = False
-            #     print(f"[TILE] Detected next tile: {next_tile}")
-            #     tile_action_paused = False
-
-            # time.sleep(0.1)
-            else:
-                print("Nothing stopping me, going forward...")
-                motor_assembly.forward()
-
-    except (Exception) as e:
-        motor_assembly.stop()
-        print("[ERROR] Start mode crashed:", e)
-        return
-def return_mode():
-    try:
-        print("[RETURN MODE] Running...")
-        while True:
-            if switch_requested or not program_running:
-                break
-            motor_assembly.backward()
-            time.sleep(1)
+        # --- 3. Bin handling ---
+        elif bin_aligned:
+            print("Bin ready in position")
+            tile_action_paused = True
             motor_assembly.stop()
-    except (Exception) as e:
+            # time.sleep(0.5)
+            if bin_location == "left":
+                print("[BIN] Picking up bin on the left [awaiting implementation!]")
+                ServoController.pickup_left()
+            elif bin_location == "right":
+                print("[BIN] Picking up bin on the right [awaiting implementation!]")
+                ServoController.pickup_right()
+            # motor_assembly.stop()
+            # time.sleep(0.5)
+
+            bin_aligned = False
+            tile_action_paused = False
+
+        # --- 4. Tile end handling ---
+        # elif Tile_end:
+        #     tile_action_paused = True
+        #     motor_assembly.stop()
+        #     sleep_ms(500)
+
+        #     next_tile = camera.detect_road()
+        #     tile_list.append(next_tile)
+        #     Tile_end = False
+        #     print(f"[TILE] Detected next tile: {next_tile}")
+        #     tile_action_paused = False
+
+        # time.sleep(0.1)
+        else:
+            print("Nothing stopping me, going forward...")
+            motor_assembly.forward()
+
+def return_mode():
+    print("[RETURN MODE] Running...")
+    while True:
+        if switch_requested or not program_running:
+            break
+        motor_assembly.backward()
+        time.sleep(1)
         motor_assembly.stop()
-        print("[ERROR] Return mode crashed:", e)
 
 def stop_mode():
-    try:
-        print("[STOP MODE] Running...")
-        while True:
-            if switch_requested or not program_running:
-                break
-            motor_assembly.stop()
-            time.sleep(0.1)
-    except (Exception) as e:
+    print("[STOP MODE] Running...")
+    while True:
+        if switch_requested or not program_running:
+            break
         motor_assembly.stop()
-        print("[ERROR] Stop mode crashed:", e)
-        return
+        time.sleep(0.1)
 
 # ---------------------- Main ----------------------
 def main():
@@ -235,20 +207,16 @@ def main():
 
     global switch_requested
 
-    try:
-        while True:
-            if not program_running:
-                break
-            mode_function = modes.get(current_mode, idle_mode)
-            switch_requested = False
+    while True:
+        if not program_running:
+            motor_assembly.stop()
+            break
+        mode_function = modes.get(current_mode, idle_mode)
+        switch_requested = False
 
-            mode_function()
-            print(f">>> Switching mode to '{current_mode}'...\n")
+        mode_function()
+        print(f">>> Switching mode to '{current_mode}'...\n")
 
-    except (Exception) as e:
-        motor_assembly.stop()
-        print("[ERROR] Main loop crashed:", e)
-        traceback.print_exc()
 
     motor_assembly.stop()
     print("Program exited.")
