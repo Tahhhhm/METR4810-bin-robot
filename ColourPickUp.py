@@ -1,5 +1,5 @@
 from Colour_sensor import ColourSensor
-from Test import dispose
+#from Test import dispose
 from PiicoDev_Unified import sleep_ms
 
 # Create the colour sensor instance
