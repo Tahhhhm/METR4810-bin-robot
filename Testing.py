@@ -16,6 +16,7 @@ program_running = True
 BIN_THRESHOLD = 400
 LEFT_ROAD_THRESHOLD = 600
 RIGHT_ROAD_THRESHOLD = 600
+#LEFT_ROAD = 
 #ENDING = 10000
 
 bin_aligned = False
@@ -55,8 +56,8 @@ def sensor_listener():
         #distance = ultrasonic.obstacle_distance()
 
         # Off-road detection
-        off_road_left = left_road_csensor['green'] < LEFT_ROAD_THRESHOLD 
-        off_road_right = right_road_csensor['green'] < RIGHT_ROAD_THRESHOLD
+        off_road_left = left_road_csensor['green'] > LEFT_ROAD_THRESHOLD 
+        off_road_right = right_road_csensor['green'] > RIGHT_ROAD_THRESHOLD
 
         # Tile end detection
         # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
