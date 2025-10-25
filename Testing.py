@@ -55,8 +55,12 @@ def sensor_listener():
         #distance = ultrasonic.obstacle_distance()
 
         # Off-road detection
-        off_road_left = all(rgb_value < ROAD_THRESHOLD for rgb_value in left_road_csensor.values())
-        off_road_right = all(rgb_value < ROAD_THRESHOLD for rgb_value in right_road_csensor.values())
+        off_road_left = all(rgb_value > ROAD_THRESHOLD for rgb_value in left_road_csensor.values())
+        off_road_right = all(rgb_value > ROAD_THRESHOLD for rgb_value in right_road_csensor.values())
+
+        print("Left Colour Sensor Data: ", left_road_csensor)
+        print("Right Colour Sensor Data: ", right_road_csensor)
+        sleep_ms(2000)
 
         # Tile end detection
         # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
@@ -103,7 +107,14 @@ def idle_mode():
     while True:
         if switch_requested or not program_running:
             break
-        motor_assembly.forward()
+        #motor_assembly.forward()
+        if off_road_right:
+            print("need to turn left")
+        elif off_road_left:
+            print("need to turn right")
+        elif off_road_right and off_road_left:
+            print("stopping...")
+        
         # time.sleep(1)
 
 def start_mode():
@@ -139,6 +150,9 @@ def start_mode():
             print("[CORRECTION] Off-road (right). Turning left...")
             motor_assembly.turn_left()
             #tile_action_paused = False
+
+        elif off_road_left and off_road_right:
+            motor_assembly.stop()
 
         # --- 3. Bin handling ---
         elif bin_aligned:
