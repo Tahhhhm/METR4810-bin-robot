@@ -55,12 +55,8 @@ def sensor_listener():
         #distance = ultrasonic.obstacle_distance()
 
         # Off-road detection
-        off_road_left = all(rgb_value > ROAD_THRESHOLD for rgb_value in left_road_csensor.values())
-        off_road_right = all(rgb_value > ROAD_THRESHOLD for rgb_value in right_road_csensor.values())
-
-        print("Left Colour Sensor Data: ", left_road_csensor)
-        print("Right Colour Sensor Data: ", right_road_csensor)
-        sleep_ms(2000)
+        off_road_left = left_road_csensor.readRGB()['green'] > ROAD_THRESHOLD 
+        off_road_right = right_road_csensor.readRGB()['green'] > ROAD_THRESHOLD
 
         # Tile end detection
         # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
@@ -72,12 +68,12 @@ def sensor_listener():
         #if left_bin_csensor >= BIN_THRESHOLD:
         #    bin_aligned = True
         #    bin_location = "left"
-        if right_bin_csensor >= BIN_THRESHOLD:
-            bin_aligned = True
-            bin_location = "right"
-        else:
-            bin_aligned = False
-            bin_location = None
+        #if right_bin_csensor >= BIN_THRESHOLD:
+        #    bin_aligned = True
+        #    bin_location = "right"
+        #else:
+        #    bin_aligned = False
+        #    bin_location = None
 
         time.sleep(0.5)
 
@@ -108,12 +104,14 @@ def idle_mode():
         if switch_requested or not program_running:
             break
         #motor_assembly.forward()
-        if off_road_right:
+        if off_road_right and off_road_left:
+            print("stopping...")
+        elif off_road_right:
             print("need to turn left")
         elif off_road_left:
             print("need to turn right")
-        elif off_road_right and off_road_left:
-            print("stopping...")
+        else:
+            print("onward")
         
         # time.sleep(1)
 
@@ -139,20 +137,20 @@ def start_mode():
             continue
 
         # --- 2. Off-road recovery ---
-        elif off_road_left:
-            #tile_action_paused = True
-            print("[CORRECTION] Off-road (left). Turning right...")
-            motor_assembly.turn_right()
-            #tile_action_paused = False
-
+        elif off_road_left and off_road_right:
+            motor_assembly.stop()
+            
         elif off_road_right:
             tile_action_paused = True
             print("[CORRECTION] Off-road (right). Turning left...")
             motor_assembly.turn_left()
             #tile_action_paused = False
-
-        elif off_road_left and off_road_right:
-            motor_assembly.stop()
+        
+        elif off_road_left:
+            #tile_action_paused = True
+            print("[CORRECTION] Off-road (left). Turning right...")
+            motor_assembly.turn_right()
+            #tile_action_paused = False
 
         # --- 3. Bin handling ---
         elif bin_aligned:
