@@ -19,16 +19,16 @@ while True:
     print(FrontR.readRGB())
     sleep_ms(1000)
     
-    #            # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
+    # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
 
     off_road_left = FrontL.readRGB()['green'] > GREEN_THRESHOLD 
     off_road_right = FrontR.readRGB()['green'] > GREEN_THRESHOLD
-    if off_road_right:
+    if off_road_right and off_road_left:
+        print("stopping...")
+    elif off_road_right:
         print("need to turn left")
     elif off_road_left:
         print("need to turn right")
-    elif off_road_right and off_road_left:
-        print("stopping...")
     else:
         print("onward")
 
