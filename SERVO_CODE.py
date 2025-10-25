@@ -57,16 +57,8 @@ class ServoController:
         - Lifts the arm
         """
         print("Starting pickup procedure (right)")
-        self.servo_arm.speed = -0.1  # lower arm
-        sleep_ms(500)
-        self.servo_arm.speed = 0
-
-        self.servo_claw.angle = 90  # close claw
-        sleep_ms(1000)
-
-        self.servo_arm.speed = 0.1  # lift arm
-        sleep_ms(1500)
-        self.servo_arm.speed = 0
+        self.servo_bottom.speed = 0.1
+        sleep_ms(900)
 
     def release(self, bin_colour):
         """
