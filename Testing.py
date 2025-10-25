@@ -117,74 +117,51 @@ def start_mode():
     global bin_aligned, next_road, tile_action_paused
     print("[START MODE] Running...")
 
-    # Start tile execution thread
-    #tile_thread = threading.Thread(target=motor_assembly.processTiles, args=(tile_list,), daemon=True)
-    #tile_thread.start()
-
     while True:
         if switch_requested or not program_running:
             break
-        
+
+        print(f"[DEBUG] obstacle={obstacle}, off_road_left={off_road_left}, off_road_right={off_road_right}, bin_aligned={bin_aligned}")
+
         # --- 1. Obstacle avoidance ---
         if obstacle:
-            #tile_action_paused = True
-            print("[AVOIDANCE] Obstacle detected! [Obstacle Avoidance pending implementation]")
-            #motor_assembly.stop()
-            #time.sleep(1)
-            #motor_assembly.turn_right()
+            print("[AVOIDANCE] Obstacle detected! Stopping...")
+            motor_assembly.stop()
             continue
 
         # --- 2. Off-road recovery ---
         elif off_road_left and off_road_right:
+            print("[CORRECTION] Both sensors off-road. Stopping...")
             motor_assembly.stop()
+            continue
 
         elif off_road_right:
-            tile_action_paused = True
             print("[CORRECTION] Off-road (right). Turning left...")
             motor_assembly.turn_left()
-            #tile_action_paused = False
-        
+            continue
+
         elif off_road_left:
-            #tile_action_paused = True
             print("[CORRECTION] Off-road (left). Turning right...")
             motor_assembly.turn_right()
-            #tile_action_paused = False
+            continue
 
         # --- 3. Bin handling ---
         elif bin_aligned:
             print("Bin ready in position")
-            tile_action_paused = True
             motor_assembly.stop()
-            # time.sleep(0.5)
             if bin_location == "left":
-                print("[BIN] Picking up bin on the left [awaiting implementation!]")
                 ServoController.pickup_left()
             elif bin_location == "right":
-                print("[BIN] Picking up bin on the right [awaiting implementation!]")
                 ServoController.pickup_right()
-            # motor_assembly.stop()
-            # time.sleep(0.5)
-
             bin_aligned = False
-            tile_action_paused = False
+            continue
 
-        # --- 4. Tile end handling ---
-        # elif Tile_end:
-        #     tile_action_paused = True
-        #     motor_assembly.stop()
-        #     sleep_ms(500)
-
-        #     next_tile = camera.detect_road()
-        #     tile_list.append(next_tile)
-        #     Tile_end = False
-        #     print(f"[TILE] Detected next tile: {next_tile}")
-        #     tile_action_paused = False
-
-        # time.sleep(0.1)
+        # --- 4. Default movement ---
         else:
             print("Nothing stopping me, going forward...")
             motor_assembly.forward()
-        time.sleep(0.5)
+
+        time.sleep(0.1)
 
 def return_mode():
     print("[RETURN MODE] Running...")
