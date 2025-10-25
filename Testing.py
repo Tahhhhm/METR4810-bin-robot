@@ -14,7 +14,7 @@ switch_requested = False
 program_running = True
 
 BIN_THRESHOLD = 400
-ROAD_THRESHOLD = 400
+ROAD_THRESHOLD = 350
 #ENDING = 10000
 
 bin_aligned = False
@@ -102,17 +102,15 @@ def idle_mode():
         if switch_requested or not program_running:
             break
         #motor_assembly.forward()
-        if off_road_right and off_road_left:
-            print("stopping...")
-        elif off_road_right:
-            print("need to turn left")
-        elif off_road_left:
-            print("need to turn right")
-        else:
-            print("onward")
+        # if off_road_right and off_road_left:
+        #     print("stopping...")
+        # elif off_road_right:
+        #     print("need to turn left")
+        # elif off_road_left:
+        #     print("need to turn right")
+        # else:
+        #     print("onward")
         
-        time.sleep(1)
-
 def start_mode():
     global bin_aligned, next_road, tile_action_paused
     print("[START MODE] Running...")
