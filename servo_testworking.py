@@ -43,21 +43,25 @@ def release():
     sleep(2)
 
 def turn180():
+    print("Turning 180 degrees")
     servo_base.speed = 0.1
     sleep(7)
     servo_base.speed = 0
 
 def turnAnti180():
+    print("Turning 180 degrees anti")
     servo_base.speed = -0.1
     sleep(7)
     servo_base.speed = 0
 
 def turn90():
+    print("Turning 90 degrees")
     servo_base.speed = 0.1
     sleep(3.5)
     servo_base.speed = 0
 
 def turnAnti90():
+    print("Turning 90 degrees anti")
     servo_base.speed = -0.1
     sleep(3.5)
     servo_base.speed = 0
@@ -67,9 +71,10 @@ micro_0.when_released = on_release
 micro_1.when_pressed = on_press_dump
 micro_1.when_released = on_release
 
-release()
-sleep(3)
-grab()
-servo_arm.speed = 0.1
+# release()
+# sleep(3)
+# grab()
+# servo_arm.speed = 0.1
+turn90()
 
 
