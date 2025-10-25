@@ -33,6 +33,7 @@ class Motor:
         print("[MOTOR] Initialized GPIO pins.")
 
     # ========== BASIC MOVEMENTS ==========
+
     def forward(self):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)
