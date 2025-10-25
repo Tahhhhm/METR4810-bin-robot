@@ -36,8 +36,15 @@ class Motor:
             self.PWMB = GPIO.PWM(EnB, 100)
             self.PWMB.start(0)
 
+        self.speed = 50
         print("[MOTOR] Initialized GPIO pins.")
-
+        
+    #Set speed 
+    def set_speed(self, speed):
+        """Set motor speed as a percentage (0–100)."""
+        self.speed = max(0, min(100, speed))
+        self.pwmA.ChangeDutyCycle(self.speed)
+        self.pwmB.ChangeDutyCycle(self.speed)
     # ========== BASIC MOVEMENTS ==========
     
     def forward(self):
