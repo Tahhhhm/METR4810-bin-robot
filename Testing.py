@@ -45,9 +45,7 @@ def sensor_listener():
         if not program_running:
             break
 
-        # Read color sensors
-        #left_bin_csensor = colour_sensor1.readRGB()['green']
-        right_bin_csensor = colour_sensor3.readRGB()['green']
+        # Read color sensor data
         left_road_csensor = colour_sensor2.readRGB()
         right_road_csensor = colour_sensor4.readRGB()
 
