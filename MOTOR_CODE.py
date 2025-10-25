@@ -26,14 +26,20 @@ class Motor:
         if EnA is not None:
             GPIO.setup(EnA, GPIO.OUT)
             GPIO.output(EnA, GPIO.HIGH)
+            self.PWMA = GPIO.PWM(EnA, 100)
+            self.PWMA.start(0)
+        
+            
         if EnB is not None:
             GPIO.setup(EnB, GPIO.OUT)
             GPIO.output(EnB, GPIO.HIGH)
+            self.PWMB = GPIO.PWM(EnB, 100)
+            self.PWMB.start(0)
 
         print("[MOTOR] Initialized GPIO pins.")
 
     # ========== BASIC MOVEMENTS ==========
-
+    
     def forward(self):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)

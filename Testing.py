@@ -37,6 +37,7 @@ colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
 # ultrasonic = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=5, echo_pin=6)
 # camera = Detection.AI()
 
+
 # ---------------------- Sensor listener ----------------------
 def sensor_listener():
     global bin_aligned, bin_location, distance, off_road_left, off_road_right, obstacle
@@ -163,6 +164,7 @@ def start_mode():
         # --- 4. Default movement ---
         else:
             print("Nothing stopping me, going forward...")
+            motor_assembly.set_speed(10)
             motor_assembly.forward()
         
         sleep_ms(5)
