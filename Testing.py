@@ -118,7 +118,8 @@ def start_mode():
     while True:
         if switch_requested or not program_running:
             break
-
+        
+        motor_assembly.stop()
         print(f"[DEBUG] obstacle={obstacle}, off_road_left={off_road_left}, off_road_right={off_road_right}, bin_aligned={bin_aligned}")
 
         # --- 1. Obstacle avoidance ---
@@ -158,7 +159,7 @@ def start_mode():
         else:
             print("Nothing stopping me, going forward...")
             motor_assembly.forward()
-            motor_assembly.stop()
+        
         sleep_ms(250)
 
 
