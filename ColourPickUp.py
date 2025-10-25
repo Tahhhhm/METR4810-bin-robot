@@ -4,7 +4,7 @@ from PiicoDev_Unified import sleep_ms
 
 # Create the colour sensor instance
 FrontL = ColourSensor(channel=1)
-B#inL = ColourSensor(channel=4)
+#BinL = ColourSensor(channel=4)
 BinR = ColourSensor(channel=2)
 FrontR = ColourSensor(channel=3)
 #sensor3 = ColourSensor(channel=2)
