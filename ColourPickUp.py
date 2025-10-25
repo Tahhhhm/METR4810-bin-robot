@@ -22,7 +22,7 @@ while True:
     #            # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
 
     off_road_left = FrontL.readRGB()['green'] > GREEN_THRESHOLD 
-    off_road_right = FrontL.readRGB()['green'] > GREEN_THRESHOLD
+    off_road_right = FrontR.readRGB()['green'] > GREEN_THRESHOLD
     if off_road_right:
         print("need to turn left")
     elif off_road_left:
