@@ -14,7 +14,8 @@ switch_requested = False
 program_running = True
 
 BIN_THRESHOLD = 400
-ROAD_THRESHOLD = 350
+LEFT_ROAD_THRESHOLD = 850
+RIGHT_ROAD_THRESHOLD = 950
 #ENDING = 10000
 
 bin_aligned = False
@@ -54,8 +55,8 @@ def sensor_listener():
         #distance = ultrasonic.obstacle_distance()
 
         # Off-road detection
-        off_road_left = left_road_csensor['green'] > ROAD_THRESHOLD 
-        off_road_right = right_road_csensor['green'] > ROAD_THRESHOLD
+        off_road_left = left_road_csensor['green'] > LEFT_ROAD_THRESHOLD 
+        off_road_right = right_road_csensor['green'] > RIGHT_ROAD_THRESHOLD
 
         # Tile end detection
         # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
@@ -129,6 +130,7 @@ def start_mode():
             print("[AVOIDANCE] Obstacle detected! Stopping...")
             motor_assembly.stop()
             sleep_ms(5)
+            
             continue
 
         # --- 2. Off-road recovery ---
