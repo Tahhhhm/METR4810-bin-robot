@@ -130,7 +130,7 @@ def start_mode():
         if obstacle:
             print("[AVOIDANCE] Obstacle detected! Stopping...")
             motor_assembly.stop()
-            sleep_ms(5)
+            sleep_ms(3)
             
             continue
 
@@ -138,19 +138,19 @@ def start_mode():
         elif off_road_left and off_road_right:
             print("[CORRECTION] Both sensors off-road. Stopping...")
             motor_assembly.backward()
-            sleep_ms(5)
+            sleep_ms(3)
             continue
 
         elif off_road_right:
             print("[CORRECTION] Off-road (right). Turning left...")
             motor_assembly.turn_left()
-            sleep_ms(5)
+            sleep_ms(3)
             continue
 
         elif off_road_left:
             print("[CORRECTION] Off-road (left). Turning right...")
             motor_assembly.turn_right()
-            sleep_ms(5)
+            sleep_ms(3)
             continue
 
         # --- 3. Bin handling ---
@@ -162,15 +162,14 @@ def start_mode():
             elif bin_location == "right":
                 ServoController.pickup_right()
             bin_aligned = False
-            sleep_ms(5)
+            sleep_ms(3)
             continue
 
         # --- 4. Default movement ---
         else:
             print("Nothing stopping me, going forward...")
             motor_assembly.forward()
-        
-        sleep_ms(5)
+            sleep_ms(3)
 
 
 def return_mode():
