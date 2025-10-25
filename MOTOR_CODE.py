@@ -43,8 +43,8 @@ class Motor:
     def set_speed(self, speed):
         """Set motor speed as a percentage (0–100)."""
         self.speed = max(0, min(100, speed))
-        self.pwmA.ChangeDutyCycle(self.speed)
-        self.pwmB.ChangeDutyCycle(self.speed)
+        self.PWMA.ChangeDutyCycle(self.speed)
+        self.PWMB.ChangeDutyCycle(self.speed)
     # ========== BASIC MOVEMENTS ==========
     
     def forward(self):
