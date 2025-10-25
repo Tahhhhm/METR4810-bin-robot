@@ -159,7 +159,7 @@ def start_mode():
             print("Nothing stopping me, going forward...")
             motor_assembly.forward()
 
-        time.sleep(0.1)
+        time.sleep(0.5)
 
 def return_mode():
     print("[RETURN MODE] Running...")
