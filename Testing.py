@@ -113,7 +113,7 @@ def idle_mode():
         else:
             print("onward")
         
-        # time.sleep(1)
+        time.sleep(1)
 
 def start_mode():
     global bin_aligned, next_road, tile_action_paused
@@ -139,7 +139,7 @@ def start_mode():
         # --- 2. Off-road recovery ---
         elif off_road_left and off_road_right:
             motor_assembly.stop()
-            
+
         elif off_road_right:
             tile_action_paused = True
             print("[CORRECTION] Off-road (right). Turning left...")
