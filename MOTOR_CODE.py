@@ -62,17 +62,17 @@ class Motor:
         #print("[MOTOR] Moving backward")
 
     def turn_left(self):
-        GPIO.output(self.in1, GPIO.LOW)
-        GPIO.output(self.in2, GPIO.HIGH)
-        GPIO.output(self.in3, GPIO.HIGH)
-        GPIO.output(self.in4, GPIO.LOW)
-        #print("[MOTOR] Turning left")
-
-    def turn_right(self):
         GPIO.output(self.in1, GPIO.HIGH)
         GPIO.output(self.in2, GPIO.LOW)
         GPIO.output(self.in3, GPIO.LOW)
         GPIO.output(self.in4, GPIO.HIGH)
+        #print("[MOTOR] Turning left")
+
+    def turn_right(self):
+        GPIO.output(self.in1, GPIO.LOW)
+        GPIO.output(self.in2, GPIO.HIGH)
+        GPIO.output(self.in3, GPIO.HIGH)
+        GPIO.output(self.in4, GPIO.LOW)
         #print("[MOTOR] Turning right")
 
     def stop(self):
