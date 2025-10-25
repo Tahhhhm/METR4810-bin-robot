@@ -17,10 +17,10 @@ ROAD_THRESHOLD = 240
 print("System running — waiting for green detection...")
 
 while True:
-    print(FrontL.readRGB())
-    print(FrontR.readRGB())
-    #print(BinL.readRGB())
-    #print(BinR.readRGB())
+    #print(FrontL.readRGB())
+    #print(FrontR.readRGB())
+    print(BinL.readRGB())
+    print(BinR.readRGB())
     sleep_ms(1000)
     
     # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
