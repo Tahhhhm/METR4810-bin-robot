@@ -134,32 +134,32 @@ def start_mode():
         if obst_left:
             print("[AVOIDANCE] Left Obstacle detected! Stopping...")
             motor_assembly.turn_right()
-            sleep_ms(5)
+            sleep_ms(1)
             continue
         
         elif obst_right:
             print("[AVOIDANCE] Right Obstacle detected! Stopping...")
             motor_assembly.turn_left()
-            sleep_ms(5)
+            sleep_ms(1)
             continue
 
         # --- 2. Off-road recovery ---
         elif off_road_left and off_road_right:
             print("[CORRECTION] Both sensors off-road. Stopping...")
             motor_assembly.backward()
-            sleep_ms(3)
+            sleep_ms(2)
             continue
 
         elif off_road_right:
             print("[CORRECTION] Off-road (right). Turning left...")
             motor_assembly.turn_left()
-            sleep_ms(3)
+            sleep_ms(2)
             continue
 
         elif off_road_left:
             print("[CORRECTION] Off-road (left). Turning right...")
             motor_assembly.turn_right()
-            sleep_ms(3)
+            sleep_ms(2)
             continue
 
         # --- 3. Bin handling ---
