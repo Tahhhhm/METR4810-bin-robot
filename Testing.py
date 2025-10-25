@@ -53,8 +53,8 @@ def sensor_listener():
         #distance = ultrasonic.obstacle_distance()
 
         # Off-road detection
-        off_road_left = left_road_csensor.readRGB()['green'] > ROAD_THRESHOLD 
-        off_road_right = right_road_csensor.readRGB()['green'] > ROAD_THRESHOLD
+        off_road_left = left_road_csensor['green'] > ROAD_THRESHOLD 
+        off_road_right = right_road_csensor['green'] > ROAD_THRESHOLD
 
         # Tile end detection
         # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
