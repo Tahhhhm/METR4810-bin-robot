@@ -108,7 +108,11 @@ def idle_mode():
     while True:
         if switch_requested or not program_running:
             break
-        #motor_assembly.forward()
+        motor_assembly.turn_left()
+        sleep_ms(3000)
+        motor_assembly.turn_right()
+        sleep_ms(3000)
+        motor_assembly.stop()
         # if off_road_right and off_road_left:
         #     print("stopping...")
         # elif off_road_right:
