@@ -17,8 +17,8 @@ ROAD_THRESHOLD = 240
 print("System running — waiting for green detection...")
 
 while True:
-    #print(FrontL.readRGB())
-    #print(FrontR.readRGB())
+    print(FrontL.readRGB())
+    print(FrontR.readRGB())
     print(BinL.readRGB())
     print(BinR.readRGB())
     sleep_ms(1000)
