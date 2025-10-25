@@ -117,7 +117,7 @@ def idle_mode():
 def start_mode():
     global bin_aligned, next_road, tile_action_paused
     print("[START MODE] Running...")
-    motor_assembly.set_speed(35)
+    motor_assembly.set_speed(45)
 
     while True:
         if switch_requested or not program_running:
