@@ -7,7 +7,7 @@ bus = smbus.SMBus(1)
 from signal import pause
 from time import sleep
 
-bus.write_byte(MUX_ADDR, 1<<3)
+bus.write_byte(MUX_ADDR, 1<<2)
 controller = PiicoDev_Servo_Driver()
 
 servo_claw = PiicoDev_Servo(controller, 2, degrees=180)
