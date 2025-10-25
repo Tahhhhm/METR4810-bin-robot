@@ -16,6 +16,8 @@ program_running = True
 BIN_THRESHOLD = 400
 LEFT_ROAD_THRESHOLD = 600
 RIGHT_ROAD_THRESHOLD = 600
+LEFT_OBSTACLE = 1000
+RIGHT_OBSTACLE = 1500
 #LEFT_ROAD = 
 #ENDING = 10000
 
@@ -42,7 +44,7 @@ colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
 
 # ---------------------- Sensor listener ----------------------
 def sensor_listener():
-    global bin_aligned, bin_location, distance, off_road_left, off_road_right, obstacle
+    global bin_aligned, bin_location, distance, off_road_left, off_road_right, obst_left, obst_right
 
     while True:
         if not program_running:
@@ -58,6 +60,8 @@ def sensor_listener():
         # Off-road detection
         off_road_left = left_road_csensor['green'] > LEFT_ROAD_THRESHOLD 
         off_road_right = right_road_csensor['green'] > RIGHT_ROAD_THRESHOLD
+        obst_left = left_road_csensor['red'] > LEFT_OBSTACLE
+        obst_right = left_road_csensor['red'] > RIGHT_OBSTACLE
 
         # Tile end detection
         # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
@@ -127,11 +131,16 @@ def start_mode():
         print(f"[DEBUG] obstacle={obstacle}, off_road_left={off_road_left}, off_road_right={off_road_right}, bin_aligned={bin_aligned}")
 
         # --- 1. Obstacle avoidance ---
-        if obstacle:
-            print("[AVOIDANCE] Obstacle detected! Stopping...")
-            motor_assembly.stop()
-            sleep_ms(3)
-            
+        if obst_left:
+            print("[AVOIDANCE] Left Obstacle detected! Stopping...")
+            motor_assembly.turn_right()
+            sleep_ms(5)
+            continue
+        
+        elif obst_right:
+            print("[AVOIDANCE] Right Obstacle detected! Stopping...")
+            motor_assembly.turn_left()
+            sleep_ms(5)
             continue
 
         # --- 2. Off-road recovery ---
