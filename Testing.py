@@ -14,8 +14,8 @@ switch_requested = False
 program_running = True
 
 BIN_THRESHOLD = 400
-LEFT_ROAD_THRESHOLD = 850
-RIGHT_ROAD_THRESHOLD = 950
+LEFT_ROAD_THRESHOLD = 600
+RIGHT_ROAD_THRESHOLD = 600
 #ENDING = 10000
 
 bin_aligned = False
