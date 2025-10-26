@@ -76,6 +76,8 @@ micro_1.when_released = on_release
 # grab()
 # servo_arm.speed = 0.1
 servo_base.speed = 1
+sleep(2)
+servo_base.speed = 0
 
 
 
