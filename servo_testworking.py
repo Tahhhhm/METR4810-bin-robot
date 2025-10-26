@@ -78,6 +78,8 @@ micro_1.when_released = on_release
 # servo_arm.speed = 0.1
 servo_base.speed = -0.1
 
+pause()
+
 
 
 
