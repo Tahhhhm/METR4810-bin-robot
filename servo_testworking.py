@@ -79,11 +79,11 @@ try:
     release()
     sleep(1)
     servo_arm.speed = 0.2
-    sleep_ms(1300)
+    sleep_ms(1100)
     servo_arm.speed = 0
     sleep(1)
     grab()
-    servo_arm.speed = -0.2
+    servo_arm.speed = -0.3
     sleep_ms(1000)
     servo_arm.speed = 0
     sleep(1)
