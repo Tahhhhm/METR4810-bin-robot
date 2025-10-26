@@ -21,16 +21,13 @@ def on_press_rest():
     # Just stops
     print("Lower Limit Switch hit...")
     servo_arm.speed = 0
+    sleep_ms(500)
+    servo_arm.speed = 0.1
     
 def on_press_dump():
     # Stops then reverses
     print("Upper Limit Switch hit")
-
     servo_arm.speed = 0
-    sleep_ms(500)
-    servo_arm.speed = 0.1
-    #turn90()
-    #release()
 
 def on_release():
     print("Switch Released")
