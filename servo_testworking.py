@@ -79,7 +79,3 @@ micro_1.when_released = on_release
 servo_base.speed = -0.1
 
 pause()
-
-
-
-
