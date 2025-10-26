@@ -18,16 +18,23 @@ micro_1 = Button(23, pull_up=True)
 micro_0 = Button(22, pull_up=True)
 
 def on_press_rest():
-    # Stops then reverses
+    micro_0.when_pressed = None
     print("Lower Limit Switch hit...")
+    servo_arm.speed = 0
+    micro_0.wait_for_release()
+    micro_0.when_pressed = on_press_rest
+    
+def on_press_dump():
+    micro_1.when_pressed = None  # Disable to prevent reentry
+    print("Upper Limit Switch hit")
+
     servo_arm.speed = 0
     sleep_ms(500)
     servo_arm.speed = 0.1
-    
-def on_press_dump():
-    # Stops
-    print("Upper Limit Switch hit")
-    servo_arm.speed = 0
+
+    # Optional: wait until released before rearming
+    micro_1.wait_for_release()
+    micro_1.when_pressed = on_press_dump
 
 def on_release():
     print("Switch Released")
