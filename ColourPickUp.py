@@ -20,10 +20,10 @@ dispose = ServoController
 print("System running — waiting for green detection...")
 
 while True:
-    #print(FrontL.readRGB())
-    print(FrontR.readRGB())
+    print(f"Left Front: {FrontL.readRGB()}\n")
+    print(f"Right Front: {FrontR.readRGB()}\n")
     #print(BinL.readRGB())
-    #print(BinR.readRGB())
+    print(f"Right Bin: {BinR.readRGB()}\n")
     sleep_ms(1000)
     
     # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
