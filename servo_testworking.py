@@ -22,6 +22,12 @@ def on_press_rest():
     print("Lower Limit Switch hit...")
     servo_arm.speed = 0
     sleep(1)
+    servo_claw.angle = 90 # Hold bin
+    servo_arm.speed = 0.3 # Raise bin
+    # Rotate base 90 degrees
+    servo_base.speed = -0.2
+    sleep_ms(1200)
+    servo_base.speed = 0
 
 
     
@@ -50,13 +56,6 @@ micro_1.when_released = on_release
 try:
     servo_claw.angle = 0 # Get ready to pick up
     servo_arm.speed = -0.2 # Go down on bin
-
-    servo_claw.angle = 90 # Hold bin
-    servo_arm.speed = 0.3 # Raise bin
-    # Rotate base 90 degrees
-    servo_base.speed = -0.2
-    sleep_ms(1200)
-    servo_base.speed = 0
 
 except KeyboardInterrupt:
     print("Shutting down safely...")
