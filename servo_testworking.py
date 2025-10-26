@@ -10,8 +10,8 @@ from time import sleep
 bus.write_byte(MUX_ADDR, 1<<2)
 controller = PiicoDev_Servo_Driver()
 
-servo_claw = PiicoDev_Servo(controller, 3, degrees=180)
-servo_arm = PiicoDev_Servo(controller, 2, midpoint_us=1500, range_us=1800)
+servo_claw = PiicoDev_Servo(controller, 2, degrees=180)
+servo_arm = PiicoDev_Servo(controller, 3, midpoint_us=1500, range_us=1800)
 servo_base = PiicoDev_Servo(controller, 1, midpoint_us=1500, range_us=1800)
 
 micro_1 = Button(18, pull_up=True)
@@ -76,6 +76,6 @@ micro_1.when_released = on_release
 # sleep(3)
 # grab()
 # servo_arm.speed = 0.1
-servo_base.speed = -0.1
+servo_arm.speed = -0.1
 
 pause()
