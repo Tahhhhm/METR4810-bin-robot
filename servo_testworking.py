@@ -16,8 +16,8 @@ servo_arm = PiicoDev_Servo(controller, 3, midpoint_us=1500, range_us=1800)
 servo_base = PiicoDev_Servo(controller, 4, midpoint_us=1400, range_us=1800)
 
 # Limit switches
-micro_lower = Button(23, pull_up=True)  # Lower switch (was upper)
-micro_upper = Button(22, pull_up=True)  # Upper switch (was lower)
+# micro_lower = Button(23, pull_up=True)  # Lower switch (was upper)
+# micro_upper = Button(22, pull_up=True)  # Upper switch (was lower)
 
 
 # --- Servo movement functions ---
@@ -36,52 +36,61 @@ def release():
 
 
 # --- Limit switch callbacks ---
-def on_press_lower():
-    """Now acts as the previous 'Upper Limit Switch hit'."""
-    print("Lower Limit Switch (was upper) hit.")
-    servo_arm.speed = 0
-    sleep(1)
-    release()  # Drop the bin
+# def on_press_lower():
+#     """Now acts as the previous 'Upper Limit Switch hit'."""
+#     print("Lower Limit Switch (was upper) hit.")
+#     servo_arm.speed = 0
+#     sleep(1)
+#     release()  # Drop the bin
 
 
-def on_press_upper():
-    """Now acts as the previous 'Lower Limit Switch hit'."""
-    print("Upper Limit Switch (was lower) hit.")
-    servo_arm.speed = 0
-    sleep(1)
+# def on_press_upper():
+#     """Now acts as the previous 'Lower Limit Switch hit'."""
+#     print("Upper Limit Switch (was lower) hit.")
+#     servo_arm.speed = 0
+#     sleep(1)
 
-    grab()  # Hold the bin
-    servo_arm.speed = 0.3  # Raise bin
-    sleep(1)
+#     grab()  # Hold the bin
+#     servo_arm.speed = 0.3  # Raise bin
+#     sleep(1)
 
-    # Rotate base 90 degrees
-    servo_base.speed = -0.2
-    sleep_ms(1200)
-    servo_base.speed = 0
-    print("Base rotation complete.")
+#     # Rotate base 90 degrees
+#     servo_base.speed = -0.2
+#     sleep_ms(1200)
+#     servo_base.speed = 0
+#     print("Base rotation complete.")
 
 
-def on_release():
-    """Triggered when either switch is released."""
-    print("Switch released.")
+# def on_release():
+#     """Triggered when either switch is released."""
+#     print("Switch released.")
 
 
 # --- Attach event handlers (swapped) ---
-micro_lower.when_pressed = on_press_lower
-micro_lower.when_released = on_release
-micro_upper.when_pressed = on_press_upper
-micro_upper.when_released = on_release
+# micro_lower.when_pressed = on_press_lower
+# micro_lower.when_released = on_release
+# micro_upper.when_pressed = on_press_upper
+# micro_upper.when_released = on_release
 
 
 # --- Main loop / startup sequence ---
 try:
     print("System initialized. Starting motion sequence...")
-    release()  # Prepare claw to pick up
-    servo_arm.speed = 0.2  # Lower arm toward bin
-
-    # Wait indefinitely for limit switch events
-    while True:
-        sleep(0.1)
+    release()
+    sleep(1)
+    servo_arm.speed = -0.2
+    sleep_ms(1300)
+    servo_arm.speed = 0
+    sleep(1)
+    grab()
+    servo_arm.speed = -0.2
+    sleep_ms(1000)
+    servo_arm.speed = 0
+    sleep(1)
+    servo_base.speed = 0.2
+    sleep_ms(1000)
+    servo_base.speed = 0
+    sleep(1)
 
 except KeyboardInterrupt:
     print("\nShutting down safely...")
