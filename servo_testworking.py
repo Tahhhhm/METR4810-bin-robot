@@ -78,7 +78,7 @@ try:
     print("System initialized. Starting motion sequence...")
     release()
     sleep(1)
-    servo_arm.speed = -0.2
+    servo_arm.speed = 0.2
     sleep_ms(1300)
     servo_arm.speed = 0
     sleep(1)
