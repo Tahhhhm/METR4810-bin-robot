@@ -12,24 +12,25 @@ controller = PiicoDev_Servo_Driver()
 
 servo_claw = PiicoDev_Servo(controller, 3, degrees=180)
 servo_arm = PiicoDev_Servo(controller, 2, midpoint_us=1500, range_us=1800)
-servo_base = PiicoDev_Servo(controller, 4, midpoint_us=1500, range_us=1800)
+servo_base = PiicoDev_Servo(controller, 1, midpoint_us=1500, range_us=1800)
 
-micro_0 = Button(26, pull_up=True)
-micro_1 = Button(22, pull_up=True)
+micro_1 = Button(18, pull_up=True)
+micro_0 = Button(1, pull_up=True)
 
 def on_press_rest():
     # Just stops
     print("Lower Limit Switch hit...")
-    servo_base.speed = 0
+    servo_arm.speed = 0
     
 def on_press_dump():
     # Stops then reverses
     print("Upper Limit Switch hit")
 
-    servo_base.speed = 0
+    servo_arm.speed = 0
     sleep_ms(500)
-    turn90()
-    release()
+    servo_arm.speed = 0.1
+    #turn90()
+    #release()
 
 def on_release():
     print("Switch Released")
@@ -75,9 +76,8 @@ micro_1.when_released = on_release
 # sleep(3)
 # grab()
 # servo_arm.speed = 0.1
-servo_base.speed = 0.5
-sleep(1)
-servo_base.speed = 0
+servo_base.speed = -0.1
+
 
 
 
