@@ -89,7 +89,7 @@ try:
     servo_arm.speed = 0
     sleep(1)
     servo_base.speed = 0.8
-    sleep_ms(550)
+    sleep_ms(500)
     servo_base.speed = 0
     sleep(1)
     servo_arm.speed = -0.5
