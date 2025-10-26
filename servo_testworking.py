@@ -72,8 +72,4 @@ micro_0.when_released = on_release
 micro_1.when_pressed = on_press_dump
 micro_1.when_released = on_release
 
-# release()
-# sleep(3)
-# grab()
-# servo_arm.speed = 0.1
-servo_arm.speed = -0.1
+servo_arm.speed = -0.3
