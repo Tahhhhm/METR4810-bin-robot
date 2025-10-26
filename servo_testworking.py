@@ -89,11 +89,11 @@ try:
     servo_arm.speed = 0
     sleep(1)
     servo_base.speed = 0.8
-    sleep_ms(400)
+    sleep_ms(700)
     servo_base.speed = 0
     sleep(1)
     servo_arm.speed = -0.5
-    sleep_ms(200)
+    sleep_ms(400)
     servo_arm.speed = 0
 
 except KeyboardInterrupt:
