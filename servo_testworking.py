@@ -15,7 +15,7 @@ servo_arm = PiicoDev_Servo(controller, 3, midpoint_us=1500, range_us=1800)
 servo_base = PiicoDev_Servo(controller, 1, midpoint_us=1500, range_us=1800)
 
 micro_1 = Button(18, pull_up=True)
-micro_0 = Button(24, pull_up=True)
+micro_0 = Button(23, pull_up=True)
 
 def on_press_rest():
     # Just stops
@@ -75,6 +75,7 @@ micro_1.when_released = on_release
 try:
     servo_arm.speed = 0.1
     sleep_ms(1000) 
+    pause()
 except KeyboardInterrupt:
     print("Shutting down safely...")
     servo_arm.speed = 0
