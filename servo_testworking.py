@@ -20,18 +20,16 @@ micro_0 = Button(22, pull_up=True) # Upper
 def on_press_rest():
     #micro_0.when_pressed = None
     print("Lower Limit Switch hit...")
-    #servo_claw.angle = 0
-    #servo_arm.speed = 0
-    #sleep_ms(500)
-    #servo_arm.speed = -0.1
+    servo_arm.speed = 0
+    sleep(1)
+
 
     
 def on_press_dump():
     #micro_1.when_pressed = None  # Disable to prevent reentry
     print("Upper Limit Switch hit")
-
-    #servo_arm.speed = 0
-    #sleep_ms(500)
+    servo_arm.speed = 0
+    sleep(1)
 
 def on_release():
     print("Switch Released")
@@ -50,19 +48,16 @@ micro_1.when_pressed = on_press_dump
 micro_1.when_released = on_release
 
 try:
-    #servo_base.speed = -0.2
-    #sleep_ms(1300)
-    #servo_base.speed = 0
-    #sleep(0.5)
-    #servo_arm.speed = 0.1
-    #pause()
-    servo_claw.angle = 0
-    sleep(3)
-    servo_claw.angle = 90
-    sleep(2)
-    servo_arm.speed = -0.3
-    sleep(2.5)
-    servo_arm.speed = 0
+    servo_claw.angle = 0 # Get ready to pick up
+    servo_arm.speed = 0.2 # Go down on bin
+
+    servo_claw.angle = 90 # Hold bin
+    servo_arm.speed = -0.3 # Raise bin
+    # Rotate base 90 degrees
+    servo_base.speed = -0.2
+    sleep_ms(1200)
+    servo_base.speed = 0
+
 except KeyboardInterrupt:
     print("Shutting down safely...")
     servo_arm.speed = 0
