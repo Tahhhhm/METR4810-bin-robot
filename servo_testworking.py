@@ -34,7 +34,7 @@ def on_press_dump():
     #sleep_ms(500)
 
 def on_release():
-    #print("Switch Released")
+    print("Switch Released")
 
 def grab():
     servo_claw.angle = 90
