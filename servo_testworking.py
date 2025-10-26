@@ -60,7 +60,7 @@ try:
     sleep(3)
     servo_claw.angle = 90
     sleep(2)
-    servo_arm.speed = -0.1
+    servo_arm.speed = -0.3
     sleep(2.5)
     servo_arm.speed = 0
 except KeyboardInterrupt:
