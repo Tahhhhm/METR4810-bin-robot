@@ -84,13 +84,16 @@ try:
     sleep(1)
     grab()
     servo_arm.speed = -0.3
-    sleep_ms(1000)
+    sleep_ms(1300)
     servo_arm.speed = 0
     sleep(1)
-    servo_base.speed = 0.2
-    sleep_ms(1000)
+    servo_base.speed = 0.4
+    sleep_ms(500)
     servo_base.speed = 0
     sleep(1)
+    servo_arm.speed = -0.3
+    sleep_ms(300)
+    servo_arm.speed = 0
 
 except KeyboardInterrupt:
     print("\nShutting down safely...")
