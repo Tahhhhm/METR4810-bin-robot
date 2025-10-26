@@ -25,7 +25,7 @@ while True:
     #print(BinL.readRGB())
     print(f"Right Bin: {BinR.readRGB()}\n")
     print("\n")
-    sleep_ms(1000)
+    sleep_ms(100)
     
     # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
 
