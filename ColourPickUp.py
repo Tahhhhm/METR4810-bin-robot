@@ -24,6 +24,7 @@ while True:
     print(f"Right Front: {FrontR.readRGB()}\n")
     #print(BinL.readRGB())
     print(f"Right Bin: {BinR.readRGB()}\n")
+    print("\n")
     sleep_ms(1000)
     
     # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
