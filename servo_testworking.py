@@ -22,6 +22,9 @@ def on_press_rest():
     print("Lower Limit Switch hit...")
     servo_claw.angle = 0
     servo_arm.speed = 0
+    sleep_ms(500)
+    servo_arm.speed = -0.1
+
     
 def on_press_dump():
     micro_1.when_pressed = None  # Disable to prevent reentry
@@ -29,7 +32,6 @@ def on_press_dump():
 
     servo_arm.speed = 0
     sleep_ms(500)
-    servo_arm.speed = 0.1
 
 def on_release():
     print("Switch Released")
