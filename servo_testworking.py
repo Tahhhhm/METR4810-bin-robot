@@ -54,8 +54,8 @@ micro_1.when_released = on_release
 
 try:
     servo_base.angle = 0
-    servo_arm.speed = 0.1
-    sleep_ms(1000) 
+    #servo_arm.speed = 0.1
+    #sleep_ms(1000) 
     pause()
 except KeyboardInterrupt:
     print("Shutting down safely...")
