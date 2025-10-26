@@ -36,8 +36,8 @@ obstacle = False
 motor_assembly = MOTOR_CODE.Motor(20, 16, 26, 19, 21, 13)
 #colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
 colour_sensor2 = Colour_sensor.ColourSensor(channel=1)
-colour_sensor3 = Colour_sensor.ColourSensor(channel=2)
 colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
+colour_sensor3 = Colour_sensor.ColourSensor(channel=4)
 # ultrasonic = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=5, echo_pin=6)
 # camera = Detection.AI()
 
@@ -53,6 +53,7 @@ def sensor_listener():
         # Read color sensor data
         left_road_csensor = colour_sensor2.readRGB()
         right_road_csensor = colour_sensor4.readRGB()
+        right_bin_csensor = colour_sensor3.readRGB()
 
         # Read ultrasonic distance
         #distance = ultrasonic.obstacle_distance()
@@ -73,9 +74,9 @@ def sensor_listener():
         #if left_bin_csensor >= BIN_THRESHOLD:
         #    bin_aligned = True
         #    bin_location = "left"
-        #if right_bin_csensor >= BIN_THRESHOLD:
-        #    bin_aligned = True
-        #    bin_location = "right"
+        if right_bin_csensor >= BIN_THRESHOLD:
+            bin_aligned = True
+            bin_location = "right"
         #else:
         #    bin_aligned = False
         #    bin_location = None

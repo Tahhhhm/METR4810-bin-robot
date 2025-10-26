@@ -20,8 +20,8 @@ dispose = ServoController
 print("System running — waiting for green detection...")
 
 while True:
-    print(f"Left Front: {FrontL.readRGB()}\n")
-    print(f"Right Front: {FrontR.readRGB()}\n")
+    #print(f"Left Front: {FrontL.readRGB()}\n")
+    #print(f"Right Front: {FrontR.readRGB()}\n")
     #print(BinL.readRGB())
     print(f"Right Bin: {BinR.readRGB()}\n")
     print("\n")
