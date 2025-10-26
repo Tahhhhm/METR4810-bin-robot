@@ -51,6 +51,7 @@ try:
     servo_base.speed = -0.2
     sleep_ms(1300)
     servo_base.speed = 0
+    sleep(0.5)
     servo_arm.speed = 0.1
     pause()
 except KeyboardInterrupt:
