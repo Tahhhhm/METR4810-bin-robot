@@ -8,7 +8,7 @@ def main():
     print("[TEST] Starting motor test...")
     
     # Set motor speed to 30%
-    motor.set_speed(30)
+    motor.set_speed(40)
 
     try:
         # Test turning left
