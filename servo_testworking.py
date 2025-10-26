@@ -75,7 +75,7 @@ def release():
 
 # --- Main loop / startup sequence ---
 try:
-    print("System initialized. Starting motion sequence...")
+    print("DUMP")
     release()
     sleep(1)
     servo_arm.speed = 0.2
@@ -95,6 +95,18 @@ try:
     servo_arm.speed = -0.3
     sleep_ms(900)
     servo_arm.speed = 0
+
+    print("PUT BACK")
+    sleep(1)
+    servo_base.speed = -0.8
+    sleep_ms(450)
+    servo_base.speed = 0
+    sleep(1)
+    servo_arm.speed = 0.5
+    sleep_ms(600)
+    servo_arm.speed = 0
+    release()
+    sleep(1)
 
 except KeyboardInterrupt:
     print("\nShutting down safely...")
