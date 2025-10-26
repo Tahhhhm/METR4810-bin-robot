@@ -103,8 +103,9 @@ try:
     servo_base.speed = 0
     sleep(1)
     servo_arm.speed = 0.2
-    sleep_ms(600)
+    sleep_ms(950)
     servo_arm.speed = 0
+    sleep(1)
     release()
     sleep(1)
 
