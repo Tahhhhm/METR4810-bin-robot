@@ -20,9 +20,8 @@ micro_0 = Button(22, pull_up=True)
 def on_press_rest():
     micro_0.when_pressed = None
     print("Lower Limit Switch hit...")
+    servo_claw.angle = 0
     servo_arm.speed = 0
-    micro_0.wait_for_release()
-    micro_0.when_pressed = on_press_rest
     
 def on_press_dump():
     micro_1.when_pressed = None  # Disable to prevent reentry
@@ -31,10 +30,6 @@ def on_press_dump():
     servo_arm.speed = 0
     sleep_ms(500)
     servo_arm.speed = 0.1
-
-    # Optional: wait until released before rearming
-    micro_1.wait_for_release()
-    micro_1.when_pressed = on_press_dump
 
 def on_release():
     print("Switch Released")
@@ -53,11 +48,10 @@ micro_1.when_pressed = on_press_dump
 micro_1.when_released = on_release
 
 try:
-    servo_base.speed = 0.2
+    servo_base.speed = -0.2
     sleep_ms(1300)
     servo_base.speed = 0
-    #servo_arm.speed = 0.1
-    #sleep_ms(1000) 
+    servo_arm.speed = 0.1
     pause()
 except KeyboardInterrupt:
     print("Shutting down safely...")
