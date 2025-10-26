@@ -55,7 +55,7 @@ micro_1.when_released = on_release
 
 try:
     servo_claw.angle = 0 # Get ready to pick up
-    servo_arm.speed = -0.2 # Go down on bin
+    servo_arm.speed = 0.2 # Go down on bin
 
 except KeyboardInterrupt:
     print("Shutting down safely...")
