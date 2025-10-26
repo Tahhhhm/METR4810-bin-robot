@@ -14,7 +14,7 @@ servo_claw = PiicoDev_Servo(controller, 2, degrees=180)
 servo_arm = PiicoDev_Servo(controller, 3, midpoint_us=1500, range_us=1800)
 servo_base = PiicoDev_Servo(controller, 1, midpoint_us=1500, range_us=1800)
 
-micro_1 = Button(18, pull_up=True)
+micro_1 = Button(22, pull_up=True)
 micro_0 = Button(23, pull_up=True)
 
 def on_press_rest():
