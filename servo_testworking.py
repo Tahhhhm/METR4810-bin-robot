@@ -84,15 +84,15 @@ try:
     sleep(1)
     grab()
     servo_arm.speed = -0.3
-    sleep_ms(1200)
+    sleep_ms(1700)
     servo_arm.speed = 0
     sleep(1)
     servo_base.speed = 0.8
     sleep_ms(450)
     servo_base.speed = 0
     sleep(1)
-    servo_arm.speed = 0.3
-    sleep_ms(100)
+    servo_arm.speed = -0.3
+    sleep_ms(800)
     servo_arm.speed = 0
 
 except KeyboardInterrupt:
