@@ -18,14 +18,14 @@ micro_1 = Button(23, pull_up=True)
 micro_0 = Button(22, pull_up=True)
 
 def on_press_rest():
-    # Just stops
+    # Stops then reverses
     print("Lower Limit Switch hit...")
     servo_arm.speed = 0
     sleep_ms(500)
     servo_arm.speed = 0.1
     
 def on_press_dump():
-    # Stops then reverses
+    # Stops
     print("Upper Limit Switch hit")
     servo_arm.speed = 0
 
@@ -34,35 +34,11 @@ def on_release():
 
 def grab():
     servo_claw.angle = 90
-    sleep(2)
+    sleep(1)
 
 def release():
     servo_claw.angle = 0
-    sleep(2)
-
-def turn180():
-    print("Turning 180 degrees")
-    servo_base.speed = 0.1
-    sleep(7)
-    servo_base.speed = 0
-
-def turnAnti180():
-    print("Turning 180 degrees anti")
-    servo_base.speed = -0.1
-    sleep(7)
-    servo_base.speed = 0
-
-def turn90():
-    print("Turning 90 degrees")
-    servo_base.speed = 0.1
-    sleep(3.5)
-    servo_base.speed = 0
-
-def turnAnti90():
-    print("Turning 90 degrees anti")
-    servo_base.speed = -0.1
-    sleep(3.5)
-    servo_base.speed = 0
+    sleep(1)
 
 micro_0.when_pressed = on_press_rest
 micro_0.when_released = on_release
