@@ -16,8 +16,8 @@ servo_arm = PiicoDev_Servo(controller, 3, midpoint_us=1500, range_us=1800)
 servo_base = PiicoDev_Servo(controller, 4, midpoint_us=1400, range_us=1800)
 
 # Limit switches
-micro_lower = Button(23, pull_up=True)  # Lower switch
-micro_upper = Button(22, pull_up=True)  # Upper switch
+micro_lower = Button(23, pull_up=True)  # Lower switch (was upper)
+micro_upper = Button(22, pull_up=True)  # Upper switch (was lower)
 
 
 # --- Servo movement functions ---
@@ -37,8 +37,16 @@ def release():
 
 # --- Limit switch callbacks ---
 def on_press_lower():
-    """Triggered when lower limit switch is hit."""
-    print("Lower Limit Switch hit...")
+    """Now acts as the previous 'Upper Limit Switch hit'."""
+    print("Lower Limit Switch (was upper) hit.")
+    servo_arm.speed = 0
+    sleep(1)
+    release()  # Drop the bin
+
+
+def on_press_upper():
+    """Now acts as the previous 'Lower Limit Switch hit'."""
+    print("Upper Limit Switch (was lower) hit.")
     servo_arm.speed = 0
     sleep(1)
 
@@ -53,20 +61,12 @@ def on_press_lower():
     print("Base rotation complete.")
 
 
-def on_press_upper():
-    """Triggered when upper limit switch is hit."""
-    print("Upper Limit Switch hit.")
-    servo_arm.speed = 0
-    sleep(1)
-    release()  # Drop the bin
-
-
 def on_release():
     """Triggered when either switch is released."""
     print("Switch released.")
 
 
-# --- Attach event handlers ---
+# --- Attach event handlers (swapped) ---
 micro_lower.when_pressed = on_press_lower
 micro_lower.when_released = on_release
 micro_upper.when_pressed = on_press_upper
