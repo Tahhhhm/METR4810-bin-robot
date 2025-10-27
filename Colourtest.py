@@ -12,8 +12,8 @@ while True:
     rgb4 = sensor4.readRGB()         # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
        # extract the green component
    
-    print('sensor1' + rgb1)
-    print('sensor2' + rgb2)
-    print('sensor3' + rgb3)
-    print('sensor4' + rgb4)
+    print('sensor1', rgb1)
+    print('sensor2',rgb2)
+    print('sensor3', rgb3)
+    print('sensor4', rgb4)
     sleep_ms(1000)
