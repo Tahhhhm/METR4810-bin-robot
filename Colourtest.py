@@ -1,19 +1,22 @@
 from Colour_sensor import ColourSensor   # adjust filename to match your .py file name
 from PiicoDev_Unified import sleep_ms
 
-sensor1 = ColourSensor(channel=0)  # create sensor instance
-sensor2 = ColourSensor(channel=1)
-sensor3 = ColourSensor(channel=2)
-sensor4 = ColourSensor(channel=3)
+#left front 1
+#right front 3
+#right bin 4
+
+left_front_sensor = ColourSensor(channel=1)  # create sensor instance
+right_front_sensor = ColourSensor(channel=3)
+right_bin_sensor = ColourSensor(channel=4)
+
 while True:
-    rgb1 = sensor1.readRGB()    
-    rgb2 = sensor2.readRGB()
-    rgb3 = sensor3.readRGB()
-    rgb4 = sensor4.readRGB()         # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
+    rgb1 = left_front_sensor.readRGB()    
+    rgb2 = right_front_sensor.readRGB()
+    rgb3 = right_bin_sensor.readRGB()     # returns a dict like {'red': 123, 'green': 456, 'blue': 789}
        # extract the green component
    
-    print('sensor1', rgb1)
-    print('sensor2',rgb2)
-    print('sensor3', rgb3)
-    print('sensor4', rgb4)
+    print('left front', rgb1)
+    print('right front',rgb2)
+    print('right bin', rgb3)
+
     sleep_ms(1000)
