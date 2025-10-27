@@ -201,20 +201,20 @@ def main():
     threading.Thread(target=sensor_listener, daemon=True).start()
 
     global switch_requested
+    try:
+        while True:
+            if not program_running:
+                motor_assembly.stop()
+                break
+            mode_function = modes.get(current_mode, idle_mode)
+            switch_requested = False
 
-    while True:
-        if not program_running:
-            motor_assembly.stop()
-            break
-        mode_function = modes.get(current_mode, idle_mode)
-        switch_requested = False
-
-        mode_function()
-        print(f">>> Switching mode to '{current_mode}'...\n")
-
-
-    motor_assembly.stop()
-    print("Program exited.")
+            mode_function()
+            print(f">>> Switching mode to '{current_mode}'...\n")
+    except KeyboardInterrupt:
+        motor_assembly.stop()
+        print("Program exited.")
+        exit()
 
 # ---------------------- Run main ----------------------
 if __name__ == "__main__":
