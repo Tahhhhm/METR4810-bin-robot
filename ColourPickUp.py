@@ -14,14 +14,14 @@ FrontR = ColourSensor(channel=3)
 # Threshold for green detection
 GREEN_THRESHOLD = 400
 ROAD_THRESHOLD = 240 
-REDBIN_THRESHOLD = 250
-YELLOWBIN_THRESHOLD = 500
+REDBIN_THRESHOLD = 500
+YELLOWBIN_THRESHOLD = 200
 dispose = ServoController
 print("System running — waiting for green detection...")
 
 while True:
-    print(f"Left Front: {FrontL.readRGB()}\n")
-    print(f"Right Front: {FrontR.readRGB()}\n")
+    #print(f"Left Front: {FrontL.readRGB()}\n")
+    #print(f"Right Front: {FrontR.readRGB()}\n")
     #print(BinL.readRGB())
     print(f"Right Bin: {BinR.readRGB()}\n")
     print("\n")
