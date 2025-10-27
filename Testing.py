@@ -114,7 +114,7 @@ def idle_mode():
 def start_mode():
     global bin_aligned, next_road, tile_action_paused
     print("[START MODE] Running...")
-    motor_assembly.set_speed(30)
+    motor_assembly.set_speed(20)
 
     while True:
         if switch_requested or not program_running:
@@ -140,19 +140,19 @@ def start_mode():
         elif off_road_left and off_road_right:
             print("[CORRECTION] Both sensors off-road. Stopping...")
             motor_assembly.backward()
-            sleep_ms(2)
+            sleep_ms(1)
             continue
 
         elif off_road_right:
             print("[CORRECTION] Off-road (right). Turning left...")
             motor_assembly.turn_left()
-            sleep_ms(2)
+            sleep_ms(1)
             continue
 
         elif off_road_left:
             print("[CORRECTION] Off-road (left). Turning right...")
             motor_assembly.turn_right()
-            sleep_ms(2)
+            sleep_ms(1)
             continue
 
         # --- 3. Bin handling ---
