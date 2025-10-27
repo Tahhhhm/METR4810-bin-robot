@@ -61,7 +61,7 @@ def sensor_listener():
 
         if right_bin_csensor['red'] >= REDBIN_THRESHOLD or right_bin_csensor['blue'] >= YELLOWBIN_THRESHOLD:
             bin_aligned = True
-            if right_bin_csensor >= REDBIN_THRESHOLD:
+            if right_bin_csensor['red'] >= REDBIN_THRESHOLD:
                 print("Garbage Bin Detected!")
             else:
                 print("Recycling Bin Detected!")
@@ -176,26 +176,24 @@ def main():
         "return": return_mode,
         "stop": stop_mode
     }
+    try:
+        # Start listener threads
+        threading.Thread(target=input_listener, daemon=True).start()
+        threading.Thread(target=sensor_listener, daemon=True).start()
 
-    # Start listener threads
-    threading.Thread(target=input_listener, daemon=True).start()
-    threading.Thread(target=sensor_listener, daemon=True).start()
+        global switch_requested
 
-    global switch_requested
+        while True:
+            if not program_running:
+                motor_assembly.stop()
+                break
+            mode_function = modes.get(current_mode, idle_mode)
+            switch_requested = False
 
-    while True:
-        if not program_running:
-            motor_assembly.stop()
-            break
-        mode_function = modes.get(current_mode, idle_mode)
-        switch_requested = False
-
-        mode_function()
-        print(f">>> Switching mode to '{current_mode}'...\n")
-
-
-    motor_assembly.stop()
-    print("Program exited.")
+            mode_function()
+            print(f">>> Switching mode to '{current_mode}'...\n")
+    except KeyboardInterrupt:
+        exit()
 
 # ---------------------- Run main ----------------------
 if __name__ == "__main__":
