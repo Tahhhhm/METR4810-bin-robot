@@ -13,8 +13,8 @@ current_mode = "idle"
 switch_requested = False
 program_running = True
 
-REDBIN_THRESHOLD = 2600 #less than red value
-YELLOWBIN_THRESHOLD = 2000 # less blue value
+#REDBIN_THRESHOLD = 3000 #less than red value
+#YELLOWBIN_THRESHOLD = 2000 # less blue value
 LEFT_ROAD_THRESHOLD = 600
 RIGHT_ROAD_THRESHOLD = 600
 RED_COLOUR_THRESHOLD = 2500
@@ -61,8 +61,8 @@ def sensor_listener():
         off_road_right = right_road_csensor['green'] > RIGHT_ROAD_THRESHOLD
         obst_left = left_road_csensor['blue'] > LEFT_OBSTACLE
         obst_right = left_road_csensor['blue'] > RIGHT_OBSTACLE
-        yellowbin = YELLOW_COLOUR_THRESHOLD< YELLOWBIN_THRESHOLD < right_bin_csensor['blue']
-        redbin =  RED_COLOUR_THRESHOLD< REDBIN_THRESHOLD < right_bin_csensor['red']
+        #yellowbin = YELLOW_COLOUR_THRESHOLD< YELLOWBIN_THRESHOLD < right_bin_csensor['blue']
+        #redbin =  RED_COLOUR_THRESHOLD< REDBIN_THRESHOLD < right_bin_csensor['red']
 
 
         # Tile end detection
@@ -183,6 +183,7 @@ def return_mode():
         motor_assembly.backward()
         time.sleep(1)
         motor_assembly.stop()
+
 
 def stop_mode():
     print("[STOP MODE] Running...")
