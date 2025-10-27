@@ -17,8 +17,8 @@ program_running = True
 #YELLOWBIN_THRESHOLD = 2000 # less blue value
 LEFT_ROAD_THRESHOLD = 600
 RIGHT_ROAD_THRESHOLD = 600
-RED_COLOUR_THRESHOLD = 2500
-YELLOW_COLOUR_THRESHOLD = 1300
+REDBIN_THRESHOLD = 100000
+YELLOWBIN_THRESHOLD = 100000
 LEFT_OBSTACLE = 600 #blue value
 RIGHT_OBSTACLE = 600 #blue value 
 bin_aligned = False
@@ -61,8 +61,8 @@ def sensor_listener():
         off_road_right = right_road_csensor['green'] > RIGHT_ROAD_THRESHOLD
         obst_left = left_road_csensor['blue'] > LEFT_OBSTACLE
         obst_right = left_road_csensor['blue'] > RIGHT_OBSTACLE
-        #yellowbin = YELLOW_COLOUR_THRESHOLD< YELLOWBIN_THRESHOLD < right_bin_csensor['blue']
-        #redbin =  RED_COLOUR_THRESHOLD< REDBIN_THRESHOLD < right_bin_csensor['red']
+        yellowbin = YELLOWBIN_THRESHOLD < right_bin_csensor['blue']
+        redbin =  REDBIN_THRESHOLD < right_bin_csensor['red']
 
 
         # Tile end detection
