@@ -17,8 +17,8 @@ program_running = True
 #YELLOWBIN_THRESHOLD = 2000 # less blue value
 LEFT_ROAD_THRESHOLD = 600
 RIGHT_ROAD_THRESHOLD = 600
-REDBIN_THRESHOLD = 100000
-YELLOWBIN_THRESHOLD = 100000
+REDBIN_THRESHOLD = 5000
+YELLOWBIN_THRESHOLD = 1900
 LEFT_OBSTACLE = 600 #blue value
 RIGHT_OBSTACLE = 600 #blue value 
 bin_aligned = False
@@ -61,8 +61,8 @@ def sensor_listener():
         off_road_right = right_road_csensor['green'] > RIGHT_ROAD_THRESHOLD
         obst_left = left_road_csensor['blue'] > LEFT_OBSTACLE
         obst_right = left_road_csensor['blue'] > RIGHT_OBSTACLE
-        yellowbin = YELLOWBIN_THRESHOLD < right_bin_csensor['blue']
-        redbin =  REDBIN_THRESHOLD < right_bin_csensor['red']
+        yellowbin = right_bin_csensor['blue']>YELLOWBIN_THRESHOLD
+        redbin =  right_bin_csensor['red']>REDBIN_THRESHOLD
 
 
         # Tile end detection
@@ -124,29 +124,30 @@ def start_mode():
 
         # --- 1. Obstacle avoidance ---
         if obst_left:
-            print("[AVOIDANCE] Left Obstacle detected! Stopping...")
+            motor_assembly.speed(30)
             motor_assembly.turn_right()
+            
             continue
         
         elif obst_right:
-            print("[AVOIDANCE] Right Obstacle detected! Stopping...")
+            motor_assembly.speed(30)
             motor_assembly.turn_left()
+            
             continue
 
         # --- 2. Off-road recovery ---
         elif off_road_left and off_road_right:
-            print("[CORRECTION] Both sensors off-road. Stopping...")
+            motor_assembly.speed(30)
             motor_assembly.backward()
-
             continue
 
         elif off_road_right:
-            print("[CORRECTION] Off-road (right). Turning left...")
-            motor_assembly.turn_left()      
+            motor_assembly.speed(30)
+            motor_assembly.turn_left()    
             continue
 
         elif off_road_left:
-            print("[CORRECTION] Off-road (left). Turning right...")
+            motor_assembly.speed(30)
             motor_assembly.turn_right()
             continue
 
@@ -166,6 +167,7 @@ def start_mode():
         # --- 4. Default movement ---
         else:
             print("Nothing stopping me, going forward...")
+            motor_assembly.speed(40)
             motor_assembly.forward()
 
 

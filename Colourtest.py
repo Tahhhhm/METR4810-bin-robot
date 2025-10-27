@@ -20,9 +20,9 @@ while True:
     print('right bin', rgb3)
 
     sleep_ms(5000)
-# left front {'red': 535, 'green': 561, 'blue': 203, 'white': 2793, 'als': 141.19248000000002, 'cct': 3552.5842819308064}
+# left front {'red': 1776, 'green': 1641, 'blue': 589, 'white': 6105, 'als': 141.19248000000002, 'cct': 3552.5842819308064}
 # right front {'red': 713, 'green': 683, 'blue': 273, 'white': 3221, 'als': 171.89744000000002, 'cct': 3423.625219949778}
-# right bin {'red': 5573, 'green': 5093, 'blue': 2033, 'white': 18579, 'als': 1281.8062400000001, 'cct': 3242.838616349687}
+# right bin {'red': 1527, 'green': 1417, 'blue': 539, 'white': 5131, 'als': 1281.8062400000001, 'cct': 3242.838616349687}
 
 # right on green
 # left front {'red': 481, 'green': 505, 'blue': 207, 'white': 2348, 'als': 127.09840000000001, 'cct': 3842.3838047825047}
@@ -51,5 +51,5 @@ while True:
 
 #pink on right bin (red bin)
 # left front {'red': 1329, 'green': 1281, 'blue': 702, 'white': 7654, 'als': 322.40208, 'cct': 4857.454232716443}
-# right front {'red': 1795, 'green': 1699, 'blue': 697, 'white': 7106, 'als': 427.60432000000003, 'cct': 3431.132395312456}
+# right front {'red': 1795, 'green': 1699, 'blue': 697, 'white': 7106, 'als': 427.`60432000000003, 'cct': 3431.132395312456}
 # right bin {'red': 5539, 'green': 4659, 'blue': 2149, 'white': 14518, 'als': 1172.5771200000001, 'cct': 3177.3024608466053}
