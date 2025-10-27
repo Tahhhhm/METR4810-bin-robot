@@ -20,7 +20,7 @@ RIGHT_ROAD_THRESHOLD = 600
 RED_COLOUR_THRESHOLD = 2500
 YELLOW_COLOUR_THRESHOLD = 1300
 LEFT_OBSTACLE = 600 #blue value
-RIGHT_OBSTACLE = 800 #blue value 
+RIGHT_OBSTACLE = 600 #blue value 
 bin_aligned = False
 off_road_left = False
 off_road_right = False
@@ -59,8 +59,8 @@ def sensor_listener():
         # Off-road detection
         off_road_left = left_road_csensor['green'] > LEFT_ROAD_THRESHOLD 
         off_road_right = right_road_csensor['green'] > RIGHT_ROAD_THRESHOLD
-        obst_left = left_road_csensor['red'] > LEFT_OBSTACLE
-        obst_right = left_road_csensor['red'] > RIGHT_OBSTACLE
+        obst_left = left_road_csensor['blue'] > LEFT_OBSTACLE
+        obst_right = left_road_csensor['blue'] > RIGHT_OBSTACLE
         yellowbin = YELLOW_COLOUR_THRESHOLD< YELLOWBIN_THRESHOLD < right_bin_csensor['blue']
         redbin =  RED_COLOUR_THRESHOLD< REDBIN_THRESHOLD < right_bin_csensor['red']
 
