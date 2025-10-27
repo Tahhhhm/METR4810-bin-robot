@@ -124,30 +124,30 @@ def start_mode():
 
         # --- 1. Obstacle avoidance ---
         if obst_left:
-            motor_assembly.speed(30)
+            motor_assembly.set_speed(30)
             motor_assembly.turn_right()
             
             continue
         
         elif obst_right:
-            motor_assembly.speed(30)
+            motor_assembly.set_speed(30)
             motor_assembly.turn_left()
             
             continue
 
         # --- 2. Off-road recovery ---
         elif off_road_left and off_road_right:
-            motor_assembly.speed(30)
+            motor_assembly.set_speed(30)
             motor_assembly.backward()
             continue
 
         elif off_road_right:
-            motor_assembly.speed(30)
+            motor_assembly.set_speed(30)
             motor_assembly.turn_left()    
             continue
 
         elif off_road_left:
-            motor_assembly.speed(30)
+            motor_assembly.set_speed(30)
             motor_assembly.turn_right()
             continue
 
@@ -167,7 +167,7 @@ def start_mode():
         # --- 4. Default movement ---
         else:
             print("Nothing stopping me, going forward...")
-            motor_assembly.speed(40)
+            motor_assembly.set_speed(40)
             motor_assembly.forward()
 
 
