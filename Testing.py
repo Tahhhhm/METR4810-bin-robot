@@ -6,6 +6,7 @@ import time
 import Detection
 from PiicoDev_Unified import sleep_ms
 from SERVO_CODE import ServoController
+from servo_testworking import pickup_bin
 import traceback
 
 # ---------------------- Global variables ----------------------
@@ -13,12 +14,12 @@ current_mode = "idle"
 switch_requested = False
 program_running = True
 
-REDBIN_THRESHOLD = 500
-YELLOWBIN_THRESHOLD = 200
+REDBIN_THRESHOLD = 2000 #red value
+YELLOWBIN_THRESHOLD = 1850 #green value
 LEFT_ROAD_THRESHOLD = 600
 RIGHT_ROAD_THRESHOLD = 600
-LEFT_OBSTACLE = 1000
-RIGHT_OBSTACLE = 1500
+LEFT_OBSTACLE = 600 #blue value
+RIGHT_OBSTACLE = 800 #blue value 
 bin_aligned = False
 off_road_left = False
 off_road_right = False
@@ -41,7 +42,7 @@ colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
 
 # ---------------------- Sensor listener ----------------------
 def sensor_listener():
-    global bin_aligned, bin_location, distance, off_road_left, off_road_right, obst_left, obst_right
+    global bin_aligned, bin_location, distance, off_road_left, off_road_right, obst_left, obst_right, yellowbin, redbin
 
     while True:
         if not program_running:
@@ -50,6 +51,7 @@ def sensor_listener():
         # Read color sensor data
         left_road_csensor = colour_sensor2.readRGB()
         right_road_csensor = colour_sensor4.readRGB()
+        right_bin_csensor = colour_sensor3.readRGB()
 
     
 
@@ -58,6 +60,8 @@ def sensor_listener():
         off_road_right = right_road_csensor['green'] > RIGHT_ROAD_THRESHOLD
         obst_left = left_road_csensor['red'] > LEFT_OBSTACLE
         obst_right = left_road_csensor['red'] > RIGHT_OBSTACLE
+        yellowbin = right_bin_csensor['green'] > YELLOWBIN_THRESHOLD
+        redbin = right_bin_csensor['red'] > REDBIN_THRESHOLD
 
         # Tile end detection
         # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
@@ -150,15 +154,14 @@ def start_mode():
             continue
 
         # --- 3. Bin handling ---
-        elif bin_aligned:
-            print("Bin ready in position")
-            motor_assembly.stop()
-            if bin_location == "left":
-                ServoController.pickup_left()
-            elif bin_location == "right":
-                ServoController.pickup_right()
-            bin_aligned = False
-            sleep_ms(3)
+        elif yellowbin:
+            print("Yellow Bin ready in position")
+            pickup_bin()
+            continue
+
+        elif redbin:
+            print("Red Bin ready in position")
+            pickup_bin()
             continue
 
         # --- 4. Default movement ---
