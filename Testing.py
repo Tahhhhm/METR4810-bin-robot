@@ -111,7 +111,7 @@ def idle_mode():
 def start_mode():
     global bin_aligned, next_road, tile_action_paused
     print("[START MODE] Running...")
-    motor_assembly.set_speed(43)
+    motor_assembly.set_speed(30)
 
     while True:
         if switch_requested or not program_running:
@@ -154,11 +154,13 @@ def start_mode():
 
         # --- 3. Bin handling ---
         elif yellowbin:
+            motor_assembly.stop()
             print("Yellow Bin ready in position")
             pickup_bin()
             continue
 
         elif redbin:
+            motor_assembly.stop()
             print("Red Bin ready in position")
             pickup_bin()
             continue
