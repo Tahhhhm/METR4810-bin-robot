@@ -13,7 +13,7 @@ A mechatronics engineering project for METR4810 focused on automation, machine v
 ## 📋 Procedure
 
 1. Navigate (near entire) track to find delivery zones and bins
-2. Use A* search algorithm to compute the shortest path to each bin
+2. Use line following to follow the track 
 3. Travel to the closest bin and record the lid colour
 4. Extract contents from the bin
 5. Move to the deposit zone
@@ -33,10 +33,6 @@ A mechatronics engineering project for METR4810 focused on automation, machine v
 
 - `Blinka`
 - `CircuitPython`
-
-#### Machine Vision
-
-- `ultralytics` (YOLO models)
 
 #### Motor Control
 
