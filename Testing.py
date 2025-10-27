@@ -5,7 +5,7 @@ import threading
 import time
 import Detection
 from PiicoDev_Unified import sleep_ms
-from SERVO_CODE import BinPickupSystem
+from SERVO_CODE import ServoController
 import traceback
 
 # ---------------------- Global variables ----------------------
@@ -24,19 +24,18 @@ off_road_left = False
 off_road_right = False
 bin_location = None
 next_road = None
-# tile_list = ["straight"]  # First action is always a straight line
+tile_list = ["straight"]  # First action is always a straight line
 tile_action_paused = False
 distance = None
 obstacle = False
+#Tile_end = False
 
 # ---------------------- Hardware setup ----------------------
 motor_assembly = MOTOR_CODE.Motor(20, 16, 26, 19, 21, 13)
-# colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
+#colour_sensor1 = Colour_sensor.ColourSensor(channel=0)
 colour_sensor2 = Colour_sensor.ColourSensor(channel=1)
-colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
 colour_sensor3 = Colour_sensor.ColourSensor(channel=4)
-servo_assembly = BinPickupSystem()
-# ultrasonic = ULTRASONIC_CODE.ObstacleDetector(trigger_pin=5, echo_pin=6)
+colour_sensor4 = Colour_sensor.ColourSensor(channel=3)
 # camera = Detection.AI()
 
 
@@ -51,7 +50,8 @@ def sensor_listener():
         # Read color sensor data
         left_road_csensor = colour_sensor2.readRGB()
         right_road_csensor = colour_sensor4.readRGB()
-        right_bin_csensor = colour_sensor3.readRGB()
+
+    
 
         # Off-road detection
         off_road_left = left_road_csensor['green'] > LEFT_ROAD_THRESHOLD 
@@ -59,13 +59,23 @@ def sensor_listener():
         obst_left = left_road_csensor['red'] > LEFT_OBSTACLE
         obst_right = left_road_csensor['red'] > RIGHT_OBSTACLE
 
-        if right_bin_csensor['red'] >= REDBIN_THRESHOLD or right_bin_csensor['blue'] >= YELLOWBIN_THRESHOLD:
-            bin_aligned = True
-            if right_bin_csensor['red'] >= REDBIN_THRESHOLD:
-                print("Garbage Bin Detected!")
-            else:
-                print("Recycling Bin Detected!")
-            
+        # Tile end detection
+        # Tile_end = left_road_csensor > ENDING and right_road_csensor > ENDING
+
+        # Obstacle detection
+        # obstacle = distance <= 8
+
+        # Bin alignment
+        #if left_bin_csensor >= BIN_THRESHOLD:
+        #    bin_aligned = True
+        #    bin_location = "left"
+        #if right_bin_csensor >= BIN_THRESHOLD:
+        #    bin_aligned = True
+        #    bin_location = "right"
+        #else:
+        #    bin_aligned = False
+        #    bin_location = None
+
         time.sleep(0.5)
 
 # ---------------------- Input listener ----------------------
@@ -111,13 +121,13 @@ def start_mode():
         if obst_left:
             print("[AVOIDANCE] Left Obstacle detected! Stopping...")
             motor_assembly.turn_right()
-            sleep_ms(1)
+            sleep_ms(10)
             continue
         
         elif obst_right:
             print("[AVOIDANCE] Right Obstacle detected! Stopping...")
             motor_assembly.turn_left()
-            sleep_ms(1)
+            sleep_ms(10)
             continue
 
         # --- 2. Off-road recovery ---
@@ -141,8 +151,15 @@ def start_mode():
 
         # --- 3. Bin handling ---
         elif bin_aligned:
-            print("Beginning pickup procedure")
-            servo_assembly.pickup_bin()
+            print("Bin ready in position")
+            motor_assembly.stop()
+            if bin_location == "left":
+                ServoController.pickup_left()
+            elif bin_location == "right":
+                ServoController.pickup_right()
+            bin_aligned = False
+            sleep_ms(3)
+            continue
 
         # --- 4. Default movement ---
         else:
@@ -176,24 +193,26 @@ def main():
         "return": return_mode,
         "stop": stop_mode
     }
-    try:
-        # Start listener threads
-        threading.Thread(target=input_listener, daemon=True).start()
-        threading.Thread(target=sensor_listener, daemon=True).start()
 
-        global switch_requested
+    # Start listener threads
+    threading.Thread(target=input_listener, daemon=True).start()
+    threading.Thread(target=sensor_listener, daemon=True).start()
 
-        while True:
-            if not program_running:
-                motor_assembly.stop()
-                break
-            mode_function = modes.get(current_mode, idle_mode)
-            switch_requested = False
+    global switch_requested
 
-            mode_function()
-            print(f">>> Switching mode to '{current_mode}'...\n")
-    except KeyboardInterrupt:
-        exit()
+    while True:
+        if not program_running:
+            motor_assembly.stop()
+            break
+        mode_function = modes.get(current_mode, idle_mode)
+        switch_requested = False
+
+        mode_function()
+        print(f">>> Switching mode to '{current_mode}'...\n")
+
+
+    motor_assembly.stop()
+    print("Program exited.")
 
 # ---------------------- Run main ----------------------
 if __name__ == "__main__":
