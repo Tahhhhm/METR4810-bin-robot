@@ -5,7 +5,6 @@ import threading
 import time
 import Detection
 from PiicoDev_Unified import sleep_ms
-from SERVO_CODE import ServoController
 from servo_testworking import pickup_bin
 import traceback
 
