@@ -61,7 +61,7 @@ def sensor_listener():
 
         if right_bin_csensor['red'] >= REDBIN_THRESHOLD or right_bin_csensor['blue'] >= YELLOWBIN_THRESHOLD:
             bin_aligned = True
-            if right_bin_csensor >= REDBIN_THRESHOLD:
+            if right_bin_csensor['red'] >= REDBIN_THRESHOLD:
                 print("Garbage Bin Detected!")
             else:
                 print("Recycling Bin Detected!")
