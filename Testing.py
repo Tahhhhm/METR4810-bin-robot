@@ -60,7 +60,7 @@ def sensor_listener():
         off_road_left = left_road_csensor['green'] > LEFT_ROAD_THRESHOLD 
         off_road_right = right_road_csensor['green'] > RIGHT_ROAD_THRESHOLD
         obst_left = left_road_csensor['blue'] > LEFT_OBSTACLE
-        obst_right = left_road_csensor['blue'] > RIGHT_OBSTACLE
+        obst_right = right_road_csensor['blue'] > RIGHT_OBSTACLE
         yellowbin = right_bin_csensor['blue']>YELLOWBIN_THRESHOLD
         redbin =  right_bin_csensor['red']>REDBIN_THRESHOLD
 
@@ -221,3 +221,4 @@ def main():
 # ---------------------- Run main ----------------------
 if __name__ == "__main__":
     main()
+
